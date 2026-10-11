@@ -532,6 +532,103 @@
       padding-top: 16px;
     }
 
+    /* ══ MARKET PULSE ══ */
+    #market-pulse { padding-top: 60px; padding-bottom: 80px; }
+    .pulse-tabs {
+      display: flex; gap: 8px; margin-bottom: 32px; flex-wrap: wrap;
+    }
+    .pulse-tab {
+      padding: 8px 20px; border-radius: 20px; font-size: 13px;
+      font-weight: 500; cursor: pointer; border: 1px solid var(--border);
+      background: transparent; color: rgba(255,255,255,0.5);
+      font-family: var(--font); transition: all 0.2s;
+    }
+    .pulse-tab.active {
+      background: rgba(245,200,66,0.1); border-color: var(--gold);
+      color: var(--gold);
+    }
+    .pulse-panel { display: none; }
+    .pulse-panel.active { display: block; }
+    .pulse-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 14px;
+    }
+    .pulse-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 18px 16px;
+      position: relative; overflow: hidden;
+      transition: all 0.3s;
+    }
+    .pulse-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: var(--pc, var(--gold));
+    }
+    .pulse-card:hover { transform: translateY(-3px); border-color: var(--pc, var(--gold)); }
+    .pulse-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+    .pulse-planet-tag {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 11px; color: var(--pc, var(--gold));
+      font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+    }
+    .pulse-planet-sym { font-size: 18px; }
+    .pulse-live-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--green); flex-shrink: 0;
+      box-shadow: 0 0 6px var(--green);
+      animation: blink 2s ease-in-out infinite;
+    }
+    .pulse-retro-badge {
+      background: rgba(255,68,68,0.15); color: var(--red);
+      padding: 2px 7px; border-radius: 6px; font-size: 9px;
+      font-weight: 700; letter-spacing: 1px;
+    }
+    .pulse-ticker {
+      font-size: 11px; color: rgba(255,255,255,0.35);
+      letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px;
+    }
+    .pulse-name { font-size: 14px; color: rgba(255,255,255,0.8); font-weight: 500; margin-bottom: 10px; }
+    .pulse-price {
+      font-family: var(--display); font-size: 20px; font-weight: 700;
+      color: #fff; letter-spacing: 1px; margin-bottom: 6px;
+      transition: color 0.4s;
+    }
+    .pulse-price.up { color: var(--green); }
+    .pulse-price.down { color: var(--red); }
+    .pulse-change {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 13px; font-weight: 600; padding: 3px 10px;
+      border-radius: 8px; margin-bottom: 12px;
+    }
+    .pulse-change.up { background: rgba(0,255,136,0.1); color: var(--green); }
+    .pulse-change.down { background: rgba(255,68,68,0.1); color: var(--red); }
+    .pulse-change.flat { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.4); }
+    .pulse-signal {
+      font-size: 11px; color: rgba(255,255,255,0.4); line-height: 1.5;
+      border-top: 1px solid var(--border); padding-top: 10px; margin-top: 4px;
+    }
+    .pulse-loading {
+      text-align: center; padding: 48px 20px;
+      color: rgba(255,255,255,0.3); font-size: 14px;
+    }
+    .pulse-error {
+      background: rgba(255,68,68,0.05); border: 1px solid rgba(255,68,68,0.15);
+      border-radius: 12px; padding: 16px 20px;
+      color: rgba(255,100,100,0.7); font-size: 13px; text-align: center;
+    }
+    .pulse-updated {
+      font-size: 11px; color: rgba(255,255,255,0.2);
+      text-align: right; margin-top: 16px; letter-spacing: 1px;
+    }
+    .fx-rate { font-family: var(--display); font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+    .fx-pair { font-size: 11px; color: rgba(255,255,255,0.35); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; }
+    @media (max-width: 480px) {
+      .pulse-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .pulse-card { padding: 14px 12px; }
+      .pulse-price { font-size: 16px; }
+      .pulse-signal { display: none; }
+    }
+
     /* ══ MOBILE ══ */
     @media (max-width: 480px) {
       /* hero */
@@ -659,6 +756,36 @@
   <div class="ticker-inner" id="tickerInner"></div>
 </div>
 
+<!-- ══ RETROGRADE STATUS BAR ══ -->
+<div style="background:rgba(255,68,68,0.07);border-bottom:1px solid rgba(255,68,68,0.15);padding:10px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;font-size:12px;color:rgba(255,255,255,0.6)">
+  <span style="color:var(--red);font-weight:700;letter-spacing:1px;font-size:11px;text-transform:uppercase;white-space:nowrap;flex-shrink:0">℞ Active Retrogrades</span>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <span style="background:rgba(255,68,68,0.12);border:1px solid rgba(255,68,68,0.2);color:#ff8888;padding:3px 10px;border-radius:10px;white-space:nowrap">♃ Jupiter · Virgo</span>
+    <span style="background:rgba(255,68,68,0.12);border:1px solid rgba(255,68,68,0.2);color:#ff8888;padding:3px 10px;border-radius:10px;white-space:nowrap">♄ Saturn · Aries</span>
+    <span style="background:rgba(255,68,68,0.12);border:1px solid rgba(255,68,68,0.2);color:#ff8888;padding:3px 10px;border-radius:10px;white-space:nowrap">♅ Uranus · Gemini</span>
+    <span style="background:rgba(255,68,68,0.12);border:1px solid rgba(255,68,68,0.2);color:#ff8888;padding:3px 10px;border-radius:10px;white-space:nowrap">♆ Neptune · Aries</span>
+  </div>
+  <span style="margin-left:auto;white-space:nowrap;color:rgba(255,255,255,0.25);font-size:11px">4 planets retrograde · Oct 2026</span>
+</div>
+
+<!-- ══ LIVE MARKET PULSE ══ -->
+<section id="market-pulse">
+  <div class="section-label">Live Data · Auto-refreshes every 60s</div>
+  <h2 class="section-title reveal">Planetary <span>Market Pulse</span></h2>
+  <p class="section-sub reveal">Real-time prices mapped to planetary rulers. Retrograde planets create friction — watch for reversals in their sectors.</p>
+  <div class="pulse-tabs">
+    <button class="pulse-tab active" onclick="switchTab('crypto')">🪙 Crypto</button>
+    <button class="pulse-tab" onclick="switchTab('fx')">💱 Currencies</button>
+  </div>
+  <div class="pulse-panel active" id="tab-crypto">
+    <div class="pulse-grid" id="cryptoGrid"><div class="pulse-loading">⟳ Fetching live prices from Binance…</div></div>
+  </div>
+  <div class="pulse-panel" id="tab-fx">
+    <div class="pulse-grid" id="fxGrid"><div class="pulse-loading">⟳ Fetching live rates…</div></div>
+  </div>
+  <div class="pulse-updated" id="pulseUpdated"></div>
+</section>
+
 <!-- ══ PLANET INTELLIGENCE ══ -->
 <section id="planets">
   <div class="section-label">Planetary Intelligence</div>
@@ -667,12 +794,17 @@
   <div class="planet-grid" id="planetGrid"></div>
 </section>
 
-<!-- ══ COSMIC EVENTS ══ -->
+<!-- ══ COSMIC EVENTS TIMELINE ══ -->
 <section id="events" style="background: radial-gradient(ellipse at 50% 100%, rgba(0,229,255,0.04) 0%, transparent 60%)">
-  <div class="section-label">Active Cosmic Events</div>
-  <h2 class="section-title reveal">Celestial <span>Market Movers</span></h2>
-  <p class="section-sub reveal">Major astronomical events with documented correlations to financial market volatility.</p>
-  <div class="events-grid" id="eventsGrid"></div>
+  <div class="section-label">Cosmic Calendar</div>
+  <h2 class="section-title reveal">Events <span>Timeline</span></h2>
+  <p class="section-sub reveal">Eclipses, retrogrades, and planetary stations — the cosmic events that historically move markets. Past 12 months and next 30 days.</p>
+  <div class="timeline-tabs" style="display:flex;gap:8px;margin-bottom:32px;flex-wrap:wrap">
+    <button class="pulse-tab active" onclick="switchTimeline('upcoming')" id="tab-upcoming-btn">📅 Upcoming (30 days)</button>
+    <button class="pulse-tab" onclick="switchTimeline('past')" id="tab-past-btn">📜 Past Year</button>
+  </div>
+  <div id="timeline-upcoming"><div class="events-grid" id="upcomingGrid"></div></div>
+  <div id="timeline-past" style="display:none"><div class="events-grid" id="pastGrid"></div></div>
 </section>
 
 <!-- ══ MOON PHASE ══ -->
@@ -998,55 +1130,179 @@ planetData.forEach(p => {
   grid.appendChild(card);
 });
 
-// ══ COSMIC EVENTS ══
-const eventsData = [
-  {
-    icon:'🌑', iconBg:'rgba(0,0,0,0.4)', title:'Solar Eclipse — Libra',
-    date:'October 2026', impact:'high',
-    desc:'Total solar eclipse in Libra conjunct the financial axis. Historically correlates with major policy shifts in central banking and currency markets.'
-  },
-  {
-    icon:'♃', iconBg:'rgba(201,149,106,0.15)', title:'Jupiter Retrograde Station',
-    date:'Sep 2026 – Feb 2027', impact:'med',
-    desc:'Jupiter stationing retrograde in Virgo signals a period of financial introspection. Markets may recalibrate overextended valuations in banking.'
-  },
-  {
-    icon:'⚡', iconBg:'rgba(255,68,68,0.1)', title:'Geomagnetic Storm Watch',
-    date:'NASA NOAA Alert', impact:'high',
-    desc:'Elevated solar activity (G2-class geomagnetic storm). Historical studies link strong geomagnetic events to short-term bearish market sentiment.'
-  },
-  {
-    icon:'♄', iconBg:'rgba(184,168,122,0.15)', title:'Saturn–Neptune Mutual Reception',
-    date:'2026 Q4', impact:'med',
-    desc:'Rare Saturn–Neptune energy exchange dissolves rigid structures in real estate and energy sectors. Creative financial instruments may emerge.'
-  },
-  {
-    icon:'☽', iconBg:'rgba(200,200,255,0.1)', title:'Full Moon in Aries',
-    date:'Oct 13, 2026', impact:'low',
-    desc:'Full moon opposite the Libra sun activates impulsive market behavior. Options expiry week may see amplified intraday swings.'
-  },
-  {
-    icon:'♅', iconBg:'rgba(126,200,227,0.1)', title:'Uranus Direct Station',
-    date:'January 2027', impact:'med',
-    desc:'Uranus turning direct in Gemini unleashes pent-up innovation. Crypto and AI sectors may experience breakout rallies as new narratives emerge.'
-  }
+// ══ SCROLL REVEAL (declared first — used by dynamic content below) ══
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ══ TAB SWITCHERS ══
+function switchTab(tab) {
+  document.querySelectorAll('.pulse-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.pulse-panel').forEach(p => p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
+}
+function switchTimeline(which) {
+  document.getElementById('timeline-upcoming').style.display = which === 'upcoming' ? '' : 'none';
+  document.getElementById('timeline-past').style.display = which === 'past' ? '' : 'none';
+  document.getElementById('tab-upcoming-btn').classList.toggle('active', which === 'upcoming');
+  document.getElementById('tab-past-btn').classList.toggle('active', which === 'past');
+}
+
+// ══ LIVE MARKET DATA ══
+const CRYPTO_MAP = [
+  { planet:'♃', pname:'Jupiter', symbol:'BTCUSDT', ticker:'BTC', name:'Bitcoin',     retro:false, color:'#c9956a', signal:'Jupiter rules wealth & expansion. BTC as digital gold follows Jupiterian cycles of boom and bust.' },
+  { planet:'♀', pname:'Venus',   symbol:'ETHUSDT', ticker:'ETH', name:'Ethereum',    retro:false, color:'#e8c96a', signal:'Venus governs beauty, value & DeFi ecosystems. ETH creative economy surges under Venus direct.' },
+  { planet:'♅', pname:'Uranus',  symbol:'SOLUSDT', ticker:'SOL', name:'Solana',      retro:true,  color:'#7ec8e3', signal:'Uranus Rx in Gemini — SOL innovation cycle pausing. Expect sudden reversals before next breakout.' },
+  { planet:'♄', pname:'Saturn',  symbol:'XRPUSDT', ticker:'XRP', name:'XRP',         retro:true,  color:'#b8a87a', signal:'Saturn Rx delays XRP regulatory clarity. Banking-sector crypto under structural reassessment.' },
+  { planet:'♂', pname:'Mars',    symbol:'DOGEUSDT',ticker:'DOGE',name:'Dogecoin',    retro:false, color:'#e05a2b', signal:'Mars in Leo amplifies speculation & meme energy. DOGE rides bold, high-risk market sentiment.' },
+  { planet:'♇', pname:'Pluto',   symbol:'LINKUSDT',ticker:'LINK',name:'Chainlink',   retro:false, color:'#8e6abf', signal:'Pluto in Aquarius transforms data infrastructure. Oracle networks gain power in the new paradigm.' },
+  { planet:'♆', pname:'Neptune', symbol:'AVAXUSDT',ticker:'AVAX',name:'Avalanche',   retro:true,  color:'#5b7fd4', signal:'Neptune Rx creates liquidity illusions. Verify AVAX TVL metrics — things may not be as they appear.' },
+  { planet:'☿', pname:'Mercury', symbol:'BNBUSDT', ticker:'BNB', name:'BNB',         retro:false, color:'#a8c0d6', signal:'Mercury rules exchanges & communication. BNB transaction volume reflects Libra balance energy.' },
 ];
 
-const evGrid = document.getElementById('eventsGrid');
-eventsData.forEach(e => {
-  const card = document.createElement('div');
-  card.className = 'event-card reveal';
-  card.innerHTML = `
-    <div class="event-icon" style="background:${e.iconBg}">${e.icon}</div>
-    <div class="event-body">
-      <div class="event-title">${e.title}</div>
-      <div class="event-date">${e.date}</div>
-      <div class="event-desc">${e.desc}</div>
-      <span class="event-impact impact-${e.impact}">${e.impact === 'high' ? '🔴 High Impact' : e.impact === 'med' ? '🟡 Medium Impact' : '🟢 Low Impact'}</span>
-    </div>
-  `;
-  evGrid.appendChild(card);
-});
+const FX_MAP = [
+  { planet:'☀', pname:'Sun',     pair:'INR',  label:'USD / INR', invert:false, color:'#ffd700', signal:'Sun in Libra seeks balance. Dollar-Rupee in diplomatic equilibrium phase — stability preferred.' },
+  { planet:'☿', pname:'Mercury', pair:'EUR',  label:'EUR / USD', invert:true,  color:'#a8c0d6', signal:'Mercury in Libra: Euro negotiations balanced. Watch ECB communications for directional shift.' },
+  { planet:'♃', pname:'Jupiter', pair:'JPY',  label:'USD / JPY', invert:false, color:'#c9956a', signal:'Jupiter Rx: Yen carry trade under review. BOJ policy reassessment likely during this retrograde.' },
+  { planet:'♄', pname:'Saturn',  pair:'GBP',  label:'GBP / USD', invert:true,  color:'#b8a87a', signal:'Saturn Rx in Aries: Pound faces structural headwinds. UK fiscal discipline under planetary scrutiny.' },
+  { planet:'♂', pname:'Mars',    pair:'AUD',  label:'AUD / USD', invert:true,  color:'#e05a2b', signal:'Mars rules metals & resources. Australian dollar tied to commodities cycle — energy sector impact.' },
+  { planet:'♆', pname:'Neptune', pair:'CHF',  label:'USD / CHF', invert:false, color:'#5b7fd4', signal:'Neptune Rx: Swiss franc safe-haven narrative may be illusion — verify fundamentals before positioning.' },
+];
+
+function fmt(n, decimals) { return Number(n).toLocaleString('en-US', {minimumFractionDigits: decimals, maximumFractionDigits: decimals}); }
+
+function buildCryptoCard(m, price, change) {
+  const chg = parseFloat(change);
+  const dir = chg > 0 ? 'up' : chg < 0 ? 'down' : 'flat';
+  const arrow = chg > 0 ? '▲' : chg < 0 ? '▼' : '–';
+  const decimals = price < 1 ? 5 : price < 100 ? 4 : 2;
+  return `
+    <div class="pulse-card reveal" style="--pc:${m.color}">
+      <div class="pulse-header">
+        <div class="pulse-planet-tag"><span class="pulse-planet-sym">${m.planet}</span>${m.pname}</div>
+        <div style="display:flex;gap:6px;align-items:center">
+          ${m.retro ? '<span class="pulse-retro-badge">℞ Rx</span>' : ''}
+          <span class="pulse-live-dot"></span>
+        </div>
+      </div>
+      <div class="pulse-ticker">${m.ticker}</div>
+      <div class="pulse-name">${m.name}</div>
+      <div class="pulse-price">$${fmt(price, decimals)}</div>
+      <div class="pulse-change ${dir}">${arrow} ${Math.abs(chg).toFixed(2)}% <span style="font-size:10px;opacity:0.6">24h</span></div>
+      <div class="pulse-signal">${m.signal}</div>
+    </div>`;
+}
+
+function buildFxCard(m, rate) {
+  const displayed = m.invert ? (1 / rate) : rate;
+  const decimals = displayed > 50 ? 2 : 4;
+  return `
+    <div class="pulse-card reveal" style="--pc:${m.color}">
+      <div class="pulse-header">
+        <div class="pulse-planet-tag"><span class="pulse-planet-sym">${m.planet}</span>${m.pname}</div>
+        <span class="pulse-live-dot"></span>
+      </div>
+      <div class="fx-pair">${m.label}</div>
+      <div class="fx-rate">${fmt(displayed, decimals)}</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.25);margin-bottom:10px">Live mid-market rate</div>
+      <div class="pulse-signal">${m.signal}</div>
+    </div>`;
+}
+
+async function loadCrypto() {
+  const grid = document.getElementById('cryptoGrid');
+  try {
+    const syms = JSON.stringify(CRYPTO_MAP.map(m => m.symbol));
+    const res = await fetch(`https://api.binance.com/api/v3/ticker/24hr?symbols=${encodeURIComponent(syms)}`);
+    if (!res.ok) throw new Error('Binance API error');
+    const data = await res.json();
+    const bySymbol = {};
+    data.forEach(d => { bySymbol[d.symbol] = d; });
+    grid.innerHTML = CRYPTO_MAP.map(m => {
+      const d = bySymbol[m.symbol];
+      return d ? buildCryptoCard(m, d.lastPrice, d.priceChangePercent) : '';
+    }).join('');
+    document.getElementById('pulseUpdated').textContent = 'Last updated: ' + new Date().toLocaleTimeString('en-IN');
+    document.querySelectorAll('#cryptoGrid .reveal').forEach(el => observer.observe(el));
+  } catch(e) {
+    grid.innerHTML = `<div class="pulse-error">⚠ Could not fetch live prices. Binance API may be temporarily unavailable.<br><small>Try again in a moment or check your connection.</small></div>`;
+  }
+}
+
+async function loadFX() {
+  const grid = document.getElementById('fxGrid');
+  try {
+    const res = await fetch('https://open.er-api.com/v6/latest/USD');
+    if (!res.ok) throw new Error('FX API error');
+    const data = await res.json();
+    grid.innerHTML = FX_MAP.map(m => {
+      const rate = data.rates[m.pair];
+      return rate ? buildFxCard(m, rate) : '';
+    }).join('');
+    document.querySelectorAll('#fxGrid .reveal').forEach(el => observer.observe(el));
+  } catch(e) {
+    grid.innerHTML = `<div class="pulse-error">⚠ Could not fetch live FX rates. Please try again.</div>`;
+  }
+}
+
+loadCrypto(); loadFX();
+setInterval(loadCrypto, 60000);
+setInterval(loadFX, 60000);
+
+// ══ COSMIC EVENTS TIMELINE ══
+const upcomingEvents = [
+  { icon:'🌕', iconBg:'rgba(200,200,255,0.1)', title:'Full Moon in Aries', date:'Oct 13, 2026', impact:'med', sectors:'Energy · Defense · Metals', desc:'Full moon opposite the Libra sun fires up impulsive market behavior. Options expiry week typically sees amplified intraday swings in Aries-ruled metals.' },
+  { icon:'☿', iconBg:'rgba(168,192,214,0.1)', title:'Mercury enters Scorpio', date:'Oct 14, 2026', impact:'med', sectors:'Tech · Cybersecurity · Research', desc:'Mercury shifts into deep, investigative Scorpio. Cybersecurity, forensic finance, and M&A research activities intensify. Hidden information surfaces.' },
+  { icon:'♄', iconBg:'rgba(184,168,122,0.1)', title:'Saturn stations Direct', date:'Nov 4, 2026', impact:'high', sectors:'Real Estate · Infrastructure · Banks', desc:'Saturn turning direct in Aries unblocks delayed construction and banking projects. Major infrastructure contracts and REIT decisions may move forward.' },
+  { icon:'🌑', iconBg:'rgba(0,0,0,0.5)', title:'New Moon — Scorpio', date:'Oct 28, 2026', impact:'low', sectors:'Banking · Insurance · Mining', desc:'New moon in Scorpio signals a fresh cycle for deep-value assets. Ideal window for initiating long-term positions in undervalued financial sector stocks.' },
+  { icon:'♀', iconBg:'rgba(232,201,106,0.1)', title:'Venus enters Sagittarius', date:'Nov 1, 2026', impact:'low', sectors:'Travel · Education · International', desc:'Venus moves into expansive Sagittarius, boosting travel, hospitality, and international luxury brands. Foreign investment appetite increases.' },
+  { icon:'🌘', iconBg:'rgba(100,100,150,0.1)', title:'Mercury Retrograde begins', date:'Nov 9, 2026', impact:'high', sectors:'Tech · Comms · Transport', desc:'Mercury stations retrograde in Sagittarius. Tech contract delays, communication breakdowns, and travel disruption historically coincide. Back up data, avoid major tech purchases.' },
+  { icon:'♆', iconBg:'rgba(91,127,212,0.1)', title:'Neptune Rx stations Direct', date:'Dec 7, 2026', impact:'med', sectors:'Oil · Pharma · Shipping', desc:'Neptune ends retrograde in Aries. Oil & gas sector narratives stabilise. Pharmaceutical regulatory clarity returns. Shipping route disruptions ease.' },
+  { icon:'♃', iconBg:'rgba(201,149,106,0.1)', title:'Jupiter Retrograde (ongoing)', date:'Sep 2026 – Feb 2027', impact:'high', sectors:'Finance · Law · International Trade', desc:'Jupiter Rx in Virgo slows financial expansion. Banks, legal firms, and international trade deals undergo internal review. Quality over quantity is the mandate.' },
+];
+
+const pastEvents = [
+  { icon:'🌘', iconBg:'rgba(100,100,150,0.1)', title:'Mercury Rx — Aries', date:'Apr 1–25, 2026', impact:'med', sectors:'Tech · Comms', desc:'Mercury retrograde in Aries triggered semiconductor supply chain disruptions. Tech earnings guidance misses were elevated during this period.' },
+  { icon:'♃', iconBg:'rgba(201,149,106,0.1)', title:'Jupiter enters Virgo', date:'Jun 9, 2026', impact:'high', sectors:'Healthcare · Analytics · Finance', desc:'Jupiter\'s entry into Virgo shifted expansion energy to healthcare analytics and financial services. Pharma index rose 12% in the 3 months following.' },
+  { icon:'🌑', iconBg:'rgba(255,50,50,0.1)', title:'Solar Eclipse — Aries', date:'Mar 29, 2026', impact:'high', sectors:'Energy · Defense · Metals', desc:'Total solar eclipse in Aries marked a major inflection point for energy markets. Oil prices surged 18% in the following 6 weeks. Defense contracts accelerated.' },
+  { icon:'♅', iconBg:'rgba(126,200,227,0.1)', title:'Uranus enters Gemini', date:'Jul 7, 2025', impact:'high', sectors:'Crypto · AI · Aviation', desc:'Uranus entering Gemini for the first time since 1942 triggered the AI revolution acceleration. Crypto markets saw a generational bull cycle initiate.' },
+  { icon:'🌕', iconBg:'rgba(200,200,255,0.1)', title:'Lunar Eclipse — Pisces', date:'Sep 7, 2025', impact:'med', sectors:'Oil · Pharma · Shipping', desc:'Penumbral lunar eclipse in Pisces coincided with oil price volatility and pharmaceutical sector rotation. Shipping ETFs dropped 8% in the following weeks.' },
+  { icon:'♄', iconBg:'rgba(184,168,122,0.1)', title:'Saturn enters Aries', date:'May 25, 2025', impact:'high', sectors:'Real Estate · Govt · Infrastructure', desc:'Saturn\'s move into Aries began a 2.5-year cycle of structural reform in real estate and government spending. REITs entered consolidation phase globally.' },
+  { icon:'♇', iconBg:'rgba(142,106,191,0.1)', title:'Pluto enters Aquarius (Final)', date:'Nov 19, 2024', impact:'high', sectors:'Banking · Tech · Power', desc:'Pluto\'s definitive ingress into Aquarius for 20 years marked a generational shift. Decentralized finance began disrupting traditional banking structures.' },
+  { icon:'☽', iconBg:'rgba(200,200,255,0.1)', title:'Full Moon — Pisces', date:'Sep 17, 2024', impact:'low', sectors:'Oil · Pharma · Sentiment', desc:'Harvest full moon in Pisces brought a sentiment peak. S&P 500 made an all-time high the following week before a minor correction in tech.' },
+  { icon:'♃', iconBg:'rgba(201,149,106,0.1)', title:'Jupiter–Uranus Conjunction', date:'Apr 20, 2024', impact:'high', sectors:'Crypto · Innovation · Biotech', desc:'Rare Jupiter–Uranus conjunction in Taurus — historically one of the most bullish signals. Bitcoin hit $73,000 ATH and NASDAQ biotech surged 20% in Q2 2024.' },
+  { icon:'🌑', iconBg:'rgba(255,50,50,0.1)', title:'Solar Eclipse — Aries', date:'Apr 8, 2024', impact:'high', sectors:'Gold · Energy · US Dollar', desc:'Total solar eclipse across North America. Gold hit a new ATH above $2,400 in the following week. Dollar weakened while commodities surged.' },
+  { icon:'☿', iconBg:'rgba(168,192,214,0.1)', title:'Mercury Rx — Aries/Pisces', date:'Apr 1–25, 2024', impact:'med', sectors:'Tech · Comms · Finance', desc:'Mercury retrograde caused notable tech sector volatility. Several earnings calls had guidance revisions and communication-related issues.' },
+  { icon:'♆', iconBg:'rgba(91,127,212,0.1)', title:'Neptune enters Aries', date:'Mar 30, 2025', impact:'high', sectors:'Oil · Gas · Illusions', desc:'Neptune\'s 165-year cycle ingress into Aries dissolved old energy paradigms. Oil market narratives became increasingly unreliable — verify all energy data.' },
+  { icon:'♄', iconBg:'rgba(184,168,122,0.1)', title:'Saturn Retrograde begins', date:'Jul 13, 2026', impact:'high', sectors:'Real Estate · Infrastructure · Govt', desc:'Saturn stationed retrograde in Aries, pausing infrastructure spending globally. Real estate markets entered consolidation. Government fiscal review cycles began.' },
+  { icon:'♅', iconBg:'rgba(126,200,227,0.1)', title:'Uranus Retrograde begins', date:'Sep 6, 2026', impact:'med', sectors:'Crypto · AI · EV · Innovation', desc:'Uranus Rx in Gemini slowed crypto innovation narratives. AI funding rounds faced delays. EV adoption metrics were revised downward during this retrograde station.' },
+  { icon:'♃', iconBg:'rgba(201,149,106,0.1)', title:'Jupiter Retrograde begins', date:'Sep 22, 2026', impact:'high', sectors:'Finance · Banking · International Trade', desc:'Jupiter stations retrograde in Virgo, marking the start of a financial introspection cycle. Overvalued financial assets began correcting toward fair value.' },
+  { icon:'🌑', iconBg:'rgba(255,50,50,0.1)', title:'Solar Eclipse — Libra (Annular)', date:'Oct 2, 2026', impact:'high', sectors:'Finance · Judiciary · Currency', desc:'Annular solar eclipse in Libra conjunct the financial axis of the zodiac. Central bank policy pivots historically occur within 2 weeks of Libra eclipses.' },
+];
+
+function renderEvents(data, gridId) {
+  const grid = document.getElementById(gridId);
+  grid.innerHTML = '';
+  data.forEach(e => {
+    const card = document.createElement('div');
+    card.className = 'event-card reveal';
+    card.innerHTML = `
+      <div class="event-icon" style="background:${e.iconBg}">${e.icon}</div>
+      <div class="event-body">
+        <div class="event-title">${e.title}</div>
+        <div class="event-date">${e.date}</div>
+        <div style="font-size:11px;color:var(--cyan);margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">${e.sectors}</div>
+        <div class="event-desc">${e.desc}</div>
+        <span class="event-impact impact-${e.impact}">${e.impact==='high'?'🔴 High Impact':e.impact==='med'?'🟡 Medium Impact':'🟢 Low Impact'}</span>
+      </div>`;
+    grid.appendChild(card);
+  });
+  grid.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+}
+renderEvents(upcomingEvents, 'upcomingGrid');
+renderEvents(pastEvents, 'pastGrid');
 
 // ══ MOON PHASE ══
 (function() {
@@ -1181,11 +1437,7 @@ function updateSunSign() {
   document.getElementById('sun-preview').classList.add('visible');
 }
 
-// ══ SCROLL REVEAL ══
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+// reveal is already set up at script start
 </script>
 </body>
 </html>
