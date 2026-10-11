@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>NiveshSetu — Financial Astrology</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NiveshSetu — Cosmic Financial Intelligence</title>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-WJSGNLTPNF"></script>
   <script>
@@ -13,335 +13,1114 @@
     gtag('config', 'G-WJSGNLTPNF');
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    :root { --bg:#00020f; --gold:#d4b87a; --muted:#44455a; --font:'Space Grotesk',system-ui,sans-serif; }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    html,body { background:var(--bg); font-family:var(--font); color:#fff; overflow-x:hidden; touch-action:pan-y; }
-
-    /* ── Header ── */
-    #hdr {
-      position:fixed; top:0; left:0; right:0; z-index:50;
-      display:flex; align-items:center; justify-content:space-between;
-      padding:16px 24px;
-      background:rgba(0,2,15,.85); backdrop-filter:blur(12px);
-      border-bottom:1px solid rgba(255,255,255,.06);
+    :root {
+      --bg: #02040f;
+      --bg2: #060916;
+      --gold: #f5c842;
+      --gold2: #e8a020;
+      --cyan: #00e5ff;
+      --purple: #9b59b6;
+      --green: #00ff88;
+      --red: #ff4444;
+      --card: rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.08);
+      --font: 'Space Grotesk', system-ui, sans-serif;
+      --display: 'Orbitron', monospace;
     }
-    .logo { font-size:18px; font-weight:500; letter-spacing:2px; color:var(--gold); }
-    .logo span { font-weight:300; color:#888; }
-    #cta-btn {
-      background:linear-gradient(135deg,#c9a227,#e8c96a); color:#000;
-      border:none; padding:8px 20px; border-radius:20px;
-      font-family:var(--font); font-size:13px; font-weight:500;
-      cursor:pointer; letter-spacing:.5px;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      font-family: var(--font);
+      color: #e8eaf0;
+      overflow-x: hidden;
     }
-    #cta-btn:hover { opacity:.88; }
 
-    /* ── Solar System Canvas ── */
-    #solar { display:block; width:100%; height:100vh; }
+    /* ══ SCROLLBAR ══ */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
 
-    /* ── Planet info panel ── */
-    #pnl {
-      position:fixed; bottom:-110%; left:0; right:0; z-index:40;
-      background:rgba(2,3,18,.97); border-top:1px solid rgba(255,255,255,.08);
-      padding:24px 24px 32px;
-      transition:bottom .38s cubic-bezier(.4,0,.2,1);
-      max-height:65vh; overflow-y:auto;
+    /* ══ NAV ══ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 32px;
+      background: rgba(2,4,15,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
     }
-    #pnl.open { bottom:0; }
-    .ptop { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px; }
-    #psym { font-size:44px; line-height:1; margin-bottom:4px; }
-    #pname { font-size:26px; font-weight:500; letter-spacing:2px; }
-    #psub { font-size:10px; color:var(--muted); letter-spacing:3px; margin-top:3px; text-transform:uppercase; }
-    .badge { display:inline-flex; align-items:center; padding:4px 12px; border-radius:20px; font-size:11px; font-weight:500; letter-spacing:1px; margin-top:10px; border:1px solid; }
-    .badge.rx   { background:rgba(255,60,60,.12); border-color:rgba(255,60,60,.4); color:#ff8888; }
-    .badge.dir  { background:rgba(60,200,100,.12); border-color:rgba(60,200,100,.4); color:#88e0a8; }
-    .badge.home { background:rgba(90,160,220,.12); border-color:rgba(90,160,220,.4); color:#90b8e8; }
-    .igrid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px; }
-    .icard { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07); border-radius:10px; padding:12px 14px; }
-    .iclbl { font-size:8px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; margin-bottom:5px; }
-    .icval { font-size:14px; font-weight:500; }
-    #pdesc { margin-top:14px; font-size:13px; line-height:1.72; color:#9a9ab0; }
-    #peffect { margin-top:12px; padding:12px 14px; background:rgba(255,255,255,.03); border-left:2px solid #666; border-radius:0 8px 8px 0; font-size:12px; line-height:1.65; color:#aaa; }
-    #xcls { background:rgba(255,255,255,.07); border:none; color:#888; width:30px; height:30px; border-radius:50%; cursor:pointer; font-size:14px; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
-    #xcls:hover { background:rgba(255,255,255,.15); color:#fff; }
-
-    /* ── Events bar ── */
-    #evbar {
-      position:fixed; bottom:0; left:0; right:0; z-index:30;
-      background:linear-gradient(to top,rgba(0,2,15,.92) 55%,transparent);
-      padding:12px 20px 16px;
+    .logo {
+      font-family: var(--display);
+      font-size: 20px; font-weight: 700;
+      background: linear-gradient(135deg, var(--gold), var(--cyan));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 2px;
     }
-    .evlbl { font-size:8px; letter-spacing:3px; color:var(--muted); text-transform:uppercase; margin-bottom:8px; }
-    .evlist { display:flex; gap:8px; flex-wrap:wrap; }
-    .evtag { font-size:10px; padding:3px 10px; border-radius:20px; border:1px solid; letter-spacing:.5px; cursor:pointer; transition:opacity .2s; }
-    .evtag:hover { opacity:.75; }
-    .evtag.rx  { border-color:rgba(255,80,80,.5); color:#ff9090; background:rgba(255,40,40,.1); }
-    .evtag.dir { border-color:rgba(80,200,120,.4); color:#90e0b0; background:rgba(40,180,80,.1); }
+    .nav-links { display: flex; gap: 32px; align-items: center; }
+    .nav-links a {
+      color: rgba(255,255,255,0.6); text-decoration: none;
+      font-size: 13px; font-weight: 500; letter-spacing: 1px;
+      text-transform: uppercase; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-cta {
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      color: #000 !important; padding: 8px 22px; border-radius: 20px;
+      font-weight: 600 !important;
+    }
+    .nav-cta:hover { opacity: 0.88; color: #000 !important; }
+    @media (max-width: 768px) {
+      nav { padding: 14px 20px; }
+      .nav-links { gap: 16px; }
+      .nav-links a:not(.nav-cta) { display: none; }
+      .logo { font-size: 15px; }
+    }
 
-    /* ── Report Section ── */
+    /* ══ HERO ══ */
+    #hero {
+      position: relative; height: 100vh; min-height: 600px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    #starfield {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+    }
+    #solarCanvas {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+    }
+    .hero-content {
+      position: relative; z-index: 10; text-align: center;
+      padding: 20px;
+      animation: fadeUp 1.2s ease both;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(0,229,255,0.1); border: 1px solid rgba(0,229,255,0.3);
+      color: var(--cyan); padding: 6px 16px; border-radius: 20px;
+      font-size: 12px; font-weight: 500; letter-spacing: 1.5px;
+      text-transform: uppercase; margin-bottom: 24px;
+      animation: pulseGlow 3s ease-in-out infinite;
+    }
+    .hero-badge::before {
+      content: '●'; color: var(--cyan); font-size: 8px;
+      animation: blink 1.5s ease-in-out infinite;
+    }
+    h1 {
+      font-family: var(--display);
+      font-size: clamp(32px, 7vw, 80px);
+      font-weight: 900; line-height: 1.05;
+      margin-bottom: 20px;
+    }
+    h1 .line1 {
+      display: block;
+      background: linear-gradient(135deg, #fff 0%, var(--gold) 50%, var(--cyan) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    h1 .line2 {
+      display: block; color: rgba(255,255,255,0.25);
+      font-size: 0.55em; letter-spacing: 6px;
+      text-transform: uppercase; margin-top: 8px;
+      -webkit-text-fill-color: rgba(255,255,255,0.25);
+    }
+    .hero-sub {
+      font-size: clamp(15px, 2vw, 18px); color: rgba(255,255,255,0.55);
+      max-width: 560px; margin: 0 auto 36px; line-height: 1.7;
+      font-weight: 300;
+    }
+    .hero-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      color: #000; border: none; padding: 14px 36px;
+      border-radius: 30px; font-family: var(--font);
+      font-size: 15px; font-weight: 600; cursor: pointer;
+      letter-spacing: 0.5px; transition: all 0.3s;
+      box-shadow: 0 0 30px rgba(245,200,66,0.4);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 50px rgba(245,200,66,0.6); }
+    .btn-ghost {
+      background: transparent;
+      color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.2);
+      padding: 14px 36px; border-radius: 30px; font-family: var(--font);
+      font-size: 15px; font-weight: 500; cursor: pointer;
+      transition: all 0.3s;
+    }
+    .btn-ghost:hover { border-color: var(--cyan); color: var(--cyan); }
+    .scroll-hint {
+      position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      color: rgba(255,255,255,0.3); font-size: 11px; letter-spacing: 2px;
+      text-transform: uppercase;
+      animation: float 2s ease-in-out infinite;
+    }
+    .scroll-hint::after {
+      content: ''; width: 1px; height: 36px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
+    }
+
+    /* ══ TICKER ══ */
+    #ticker {
+      background: rgba(0,0,0,0.6);
+      border-top: 1px solid rgba(245,200,66,0.2);
+      border-bottom: 1px solid rgba(245,200,66,0.2);
+      padding: 10px 0; overflow: hidden;
+      position: relative; z-index: 10;
+    }
+    .ticker-inner {
+      display: flex; gap: 0;
+      animation: scroll 45s linear infinite;
+      white-space: nowrap;
+    }
+    .ticker-item {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 0 40px; font-size: 13px;
+      color: rgba(255,255,255,0.7);
+    }
+    .ticker-item .planet-icon { font-size: 16px; }
+    .ticker-item .event-name { color: var(--gold); font-weight: 600; }
+    .ticker-item .market-tag {
+      background: rgba(0,229,255,0.15); color: var(--cyan);
+      padding: 2px 8px; border-radius: 10px; font-size: 11px;
+      font-weight: 500;
+    }
+    .ticker-sep { color: rgba(255,255,255,0.15); padding: 0 8px; }
+
+    /* ══ SECTIONS ══ */
+    section {
+      padding: 100px 40px;
+      max-width: 1200px; margin: 0 auto;
+    }
+    @media (max-width: 768px) { section { padding: 70px 20px; } }
+
+    .section-label {
+      font-family: var(--display); font-size: 11px;
+      color: var(--cyan); letter-spacing: 4px; text-transform: uppercase;
+      margin-bottom: 12px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .section-label::after {
+      content: ''; flex: 1; max-width: 60px; height: 1px;
+      background: linear-gradient(to right, var(--cyan), transparent);
+    }
+    .section-title {
+      font-family: var(--display); font-size: clamp(24px, 4vw, 42px);
+      font-weight: 700; line-height: 1.1; margin-bottom: 16px;
+      color: #fff;
+    }
+    .section-title span { color: var(--gold); }
+    .section-sub {
+      color: rgba(255,255,255,0.45); font-size: 15px;
+      max-width: 520px; line-height: 1.7; margin-bottom: 56px;
+    }
+
+    /* ══ PLANET GRID ══ */
+    .planet-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 20px;
+    }
+    .planet-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px;
+      position: relative; overflow: hidden;
+      transition: all 0.4s;
+      cursor: default;
+    }
+    .planet-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: var(--planet-color, var(--gold));
+    }
+    .planet-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--planet-color, var(--gold));
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 30px var(--glow, rgba(245,200,66,0.1));
+    }
+    .planet-card-header {
+      display: flex; align-items: center; gap: 14px; margin-bottom: 16px;
+    }
+    .planet-symbol {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: var(--planet-bg, rgba(245,200,66,0.1));
+      border: 2px solid var(--planet-color, var(--gold));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; flex-shrink: 0;
+      box-shadow: 0 0 20px var(--glow, rgba(245,200,66,0.2));
+    }
+    .planet-name {
+      font-family: var(--display); font-size: 15px;
+      font-weight: 700; color: #fff; letter-spacing: 1px;
+    }
+    .planet-position {
+      font-size: 12px; color: var(--planet-color, var(--gold));
+      margin-top: 3px; font-weight: 500;
+    }
+    .planet-retro {
+      display: inline-block; background: rgba(255,68,68,0.15);
+      color: var(--red); padding: 2px 8px; border-radius: 8px;
+      font-size: 10px; font-weight: 700; letter-spacing: 1px;
+      margin-top: 3px;
+    }
+    .planet-sector {
+      font-size: 11px; color: rgba(255,255,255,0.4);
+      text-transform: uppercase; letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+    .planet-insight {
+      font-size: 13px; color: rgba(255,255,255,0.65);
+      line-height: 1.6;
+    }
+    .sentiment-bar {
+      margin-top: 16px;
+      height: 3px; border-radius: 2px;
+      background: rgba(255,255,255,0.08);
+      overflow: hidden;
+    }
+    .sentiment-fill {
+      height: 100%; border-radius: 2px;
+      background: var(--planet-color, var(--gold));
+      transition: width 1s ease;
+    }
+    .sentiment-labels {
+      display: flex; justify-content: space-between;
+      margin-top: 6px;
+    }
+    .sentiment-labels span {
+      font-size: 10px; color: rgba(255,255,255,0.3);
+      text-transform: uppercase; letter-spacing: 1px;
+    }
+
+    /* ══ COSMIC EVENTS ══ */
+    .events-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 768px) { .events-grid { grid-template-columns: 1fr; } }
+    .event-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px;
+      display: flex; gap: 20px; align-items: flex-start;
+      transition: all 0.3s;
+    }
+    .event-card:hover { border-color: rgba(255,255,255,0.15); transform: translateY(-2px); }
+    .event-icon {
+      width: 56px; height: 56px; border-radius: 14px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px;
+    }
+    .event-body { flex: 1; min-width: 0; }
+    .event-title {
+      font-family: var(--display); font-size: 14px;
+      font-weight: 600; color: #fff; margin-bottom: 6px;
+    }
+    .event-date { font-size: 12px; color: var(--gold); margin-bottom: 8px; font-weight: 500; }
+    .event-desc { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.6; }
+    .event-impact {
+      display: inline-block; margin-top: 10px;
+      padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 600;
+    }
+    .impact-high { background: rgba(255,68,68,0.15); color: #ff6b6b; }
+    .impact-med { background: rgba(245,200,66,0.15); color: var(--gold); }
+    .impact-low { background: rgba(0,255,136,0.15); color: var(--green); }
+
+    /* ══ MOON PHASE ══ */
+    #moon-section { background: radial-gradient(ellipse at center, rgba(155,89,182,0.06) 0%, transparent 70%); }
+    .moon-container {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 48px; align-items: center;
+    }
+    @media (max-width: 768px) { .moon-container { grid-template-columns: 1fr; } }
+    .moon-visual {
+      display: flex; flex-direction: column; align-items: center; gap: 20px;
+    }
+    #moonCanvas { display: block; }
+    .moon-name {
+      font-family: var(--display); font-size: 18px; color: #fff; font-weight: 600;
+    }
+    .moon-date { font-size: 13px; color: rgba(255,255,255,0.45); }
+    .moon-phases-row {
+      display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+    }
+    .moon-phase-dot {
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      cursor: default;
+    }
+    .phase-circle {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.2);
+      overflow: hidden; position: relative;
+    }
+    .phase-circle.active { border-color: var(--gold); }
+    .moon-phase-dot span { font-size: 10px; color: rgba(255,255,255,0.4); text-align: center; max-width: 50px; }
+    .moon-info { padding: 8px 0; }
+    .moon-tip {
+      background: rgba(155,89,182,0.1); border: 1px solid rgba(155,89,182,0.2);
+      border-radius: 12px; padding: 20px 24px; margin-top: 20px;
+    }
+    .moon-tip h4 {
+      font-family: var(--display); font-size: 13px; color: var(--purple);
+      letter-spacing: 1px; margin-bottom: 8px;
+    }
+    .moon-tip p { font-size: 14px; color: rgba(255,255,255,0.6); line-height: 1.6; }
+    .moon-market-tips { display: flex; flex-direction: column; gap: 16px; }
+    .moon-tip-item {
+      display: flex; gap: 14px; align-items: flex-start;
+    }
+    .moon-tip-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+    .moon-tip-text h5 {
+      font-size: 14px; font-weight: 600; color: #fff; margin-bottom: 4px;
+    }
+    .moon-tip-text p { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.5; }
+
+    /* ══ ZODIAC MAP ══ */
+    .zodiac-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 900px) { .zodiac-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 600px) { .zodiac-grid { grid-template-columns: repeat(2, 1fr); } }
+    .zodiac-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 18px 16px;
+      transition: all 0.3s; position: relative;
+      overflow: hidden;
+    }
+    .zodiac-card.active {
+      border-color: var(--gold);
+      background: rgba(245,200,66,0.06);
+    }
+    .zodiac-card.active::after {
+      content: '🌟';
+      position: absolute; top: 8px; right: 10px; font-size: 12px;
+    }
+    .zodiac-card:hover { transform: translateY(-2px); }
+    .zodiac-symbol { font-size: 28px; margin-bottom: 8px; }
+    .zodiac-name {
+      font-family: var(--display); font-size: 12px;
+      color: #fff; font-weight: 600; letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+    .zodiac-sector { font-size: 11px; color: rgba(255,255,255,0.4); margin-bottom: 8px; }
+    .zodiac-planet {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: rgba(245,200,66,0.1); color: var(--gold);
+      padding: 3px 8px; border-radius: 8px; font-size: 11px; font-weight: 500;
+    }
+
+    /* ══ REPORT FORM ══ */
     #report-section {
-      min-height:100vh; padding:80px 24px 60px;
-      display:flex; flex-direction:column; align-items:center;
-      background:linear-gradient(to bottom,#00020f,#050820,#00020f);
+      background: radial-gradient(ellipse at 50% 0%, rgba(245,200,66,0.06) 0%, transparent 65%);
     }
-    .section-title { font-size:28px; font-weight:300; letter-spacing:4px; color:var(--gold); text-align:center; margin-bottom:8px; }
-    .section-sub { font-size:13px; color:#666; letter-spacing:2px; text-align:center; margin-bottom:40px; }
-
+    .form-container {
+      max-width: 680px; margin: 0 auto;
+    }
     .form-card {
-      width:100%; max-width:480px;
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:16px; padding:32px;
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(245,200,66,0.2);
+      border-radius: 24px; padding: 48px;
+      position: relative; overflow: hidden;
     }
-    .form-group { margin-bottom:20px; }
-    label { display:block; font-size:10px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; margin-bottom:8px; }
-    input {
-      width:100%; background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.1); border-radius:8px;
-      padding:12px 14px; color:#fff; font-family:var(--font); font-size:14px;
+    .form-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
     }
-    input:focus { outline:none; border-color:rgba(212,184,122,.5); }
-    input::placeholder { color:#444; }
-
-    .price-box {
-      background:rgba(212,184,122,.08); border:1px solid rgba(212,184,122,.25);
-      border-radius:10px; padding:16px; margin-bottom:20px; text-align:center;
+    @media (max-width: 600px) { .form-card { padding: 28px 20px; } }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+    .form-group { margin-bottom: 20px; }
+    .form-group label {
+      display: block; font-size: 12px; font-weight: 500;
+      color: rgba(255,255,255,0.5); text-transform: uppercase;
+      letter-spacing: 1.5px; margin-bottom: 8px;
     }
-    .price-box .price { font-size:32px; font-weight:500; color:var(--gold); }
-    .price-box .price-sub { font-size:11px; color:#666; margin-top:4px; letter-spacing:1px; }
-
-    .preview-box {
-      background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.07);
-      border-radius:10px; padding:16px; margin-bottom:20px; display:none;
+    .form-group input {
+      width: 100%; background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 10px;
+      padding: 13px 16px; color: #fff; font-family: var(--font); font-size: 15px;
+      transition: all 0.2s; outline: none;
     }
-    .preview-sign { font-size:20px; font-weight:500; color:var(--gold); margin-bottom:6px; }
-    .preview-text { font-size:13px; color:#9a9ab0; line-height:1.7; }
-
+    .form-group input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 20px rgba(245,200,66,0.1);
+    }
+    .form-group input::placeholder { color: rgba(255,255,255,0.2); }
+    .form-group input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.7); cursor: pointer; }
+    #sun-preview {
+      background: rgba(0,229,255,0.05); border: 1px solid rgba(0,229,255,0.15);
+      border-radius: 12px; padding: 16px 20px; margin: 20px 0;
+      display: none; align-items: center; gap: 14px;
+    }
+    #sun-preview.visible { display: flex; }
+    #sun-preview .sign-symbol { font-size: 32px; }
+    #sun-preview .sign-info h4 { font-family: var(--display); font-size: 14px; color: var(--cyan); }
+    #sun-preview .sign-info p { font-size: 13px; color: rgba(255,255,255,0.55); margin-top: 4px; line-height: 1.5; }
     .pay-btn {
-      width:100%; padding:14px;
-      background:linear-gradient(135deg,#c9a227,#e8c96a); color:#000;
-      border:none; border-radius:10px; font-family:var(--font);
-      font-size:15px; font-weight:500; cursor:pointer; letter-spacing:.5px;
+      width: 100%; padding: 16px 24px;
+      border-radius: 14px; border: none;
+      font-family: var(--font); font-size: 16px; font-weight: 600;
+      cursor: not-allowed;
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.3);
+      border: 1px solid rgba(255,255,255,0.08);
+      margin-top: 8px;
     }
-    .pay-btn:hover { opacity:.88; }
-    .pay-btn:disabled { opacity:.4; cursor:not-allowed; }
+    .coming-soon-badge {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      margin-top: 16px;
+    }
+    .coming-soon-badge span {
+      font-size: 12px; color: rgba(255,255,255,0.3);
+      letter-spacing: 2px; text-transform: uppercase;
+    }
+    .coming-soon-badge::before, .coming-soon-badge::after {
+      content: ''; flex: 1; height: 1px;
+      background: rgba(255,255,255,0.06);
+    }
+    #email-tag {
+      font-size: 12px; color: rgba(255,255,255,0.3);
+      text-align: center; margin-top: 12px;
+    }
 
-    .disclaimer { font-size:10px; color:#444; text-align:center; margin-top:14px; line-height:1.6; }
+    /* ══ FOOTER ══ */
+    footer {
+      background: rgba(0,0,0,0.4);
+      border-top: 1px solid var(--border);
+      padding: 48px 40px 32px;
+    }
+    .footer-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; flex-direction: column; gap: 32px;
+    }
+    .footer-top {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      flex-wrap: wrap; gap: 24px;
+    }
+    .footer-brand .logo { font-size: 18px; }
+    .footer-brand p {
+      font-size: 13px; color: rgba(255,255,255,0.35);
+      margin-top: 8px; max-width: 280px; line-height: 1.6;
+    }
+    .footer-links { display: flex; gap: 32px; flex-wrap: wrap; }
+    .footer-links a {
+      font-size: 13px; color: rgba(255,255,255,0.4); text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-bottom {
+      border-top: 1px solid var(--border); padding-top: 24px;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .footer-bottom span { font-size: 12px; color: rgba(255,255,255,0.25); }
+    .nasa-credit {
+      font-size: 11px; color: rgba(255,255,255,0.2); letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .disclaimer {
+      font-size: 11px; color: rgba(255,255,255,0.2);
+      line-height: 1.6; border-top: 1px solid var(--border);
+      padding-top: 16px;
+    }
 
-    /* ── Hint ── */
-    #hint { position:fixed; top:50%; left:50%; transform:translate(-50%,60px); font-size:10px; color:rgba(255,255,255,.2); letter-spacing:3px; pointer-events:none; opacity:0; animation:fh 5s ease-in-out 2s forwards; white-space:nowrap; z-index:10; }
-    @keyframes fh { 0%,100%{opacity:0} 20%,80%{opacity:1} }
+    /* ══ ANIMATIONS ══ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(-8px); }
+    }
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 10px rgba(0,229,255,0.2); }
+      50% { box-shadow: 0 0 25px rgba(0,229,255,0.5); }
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    @keyframes scroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+    @keyframes spinSlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes moonGlow {
+      0%, 100% { filter: drop-shadow(0 0 10px rgba(255,255,255,0.3)); }
+      50% { filter: drop-shadow(0 0 25px rgba(255,255,255,0.6)); }
+    }
+    .reveal {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
   </style>
 </head>
 <body>
 
-<header id="hdr">
-  <div class="logo">Nivesh<span>Setu</span></div>
-  <button id="cta-btn" onclick="document.getElementById('report-section').scrollIntoView({behavior:'smooth'})">Get My Report ↓</button>
-</header>
+<!-- ══ NAV ══ -->
+<nav>
+  <div class="logo">NIVESHSETU</div>
+  <div class="nav-links">
+    <a href="#planets">Planets</a>
+    <a href="#events">Events</a>
+    <a href="#moon">Moon</a>
+    <a href="#report-section" class="nav-cta">Get Report</a>
+  </div>
+</nav>
 
-<canvas id="solar"></canvas>
-<div id="hint">TOUCH A PLANET TO EXPLORE</div>
-
-<div id="pnl">
-  <div class="ptop">
-    <div>
-      <div id="psym">☿</div>
-      <div id="pname">Mercury</div>
-      <div id="psub">The Messenger</div>
-      <div id="pbadge" class="badge rx">℞ Retrograde</div>
+<!-- ══ HERO ══ -->
+<section id="hero" style="padding:0;max-width:100%">
+  <canvas id="starfield"></canvas>
+  <canvas id="solarCanvas"></canvas>
+  <div class="hero-content">
+    <div class="hero-badge">Live Cosmic Intelligence</div>
+    <h1>
+      <span class="line1">Where Stars Meet<br>Markets</span>
+      <span class="line2">Financial Astrology · Since Ancient Wisdom</span>
+    </h1>
+    <p class="hero-sub">Decode planetary transits, cosmic cycles, and celestial alignments that shape global financial markets.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="document.getElementById('report-section').scrollIntoView({behavior:'smooth'})">✦ Get My Cosmic Report</button>
+      <button class="btn-ghost" onclick="document.getElementById('planets').scrollIntoView({behavior:'smooth'})">Explore Planets ↓</button>
     </div>
-    <button id="xcls" onclick="closePnl()">✕</button>
   </div>
-  <div class="igrid">
-    <div class="icard"><div class="iclbl">Current sign</div><div class="icval" id="psign">—</div></div>
-    <div class="icard"><div class="iclbl">Orbital period</div><div class="icval" id="pper">—</div></div>
-  </div>
-  <div id="pdesc"></div>
-  <div id="peffect"></div>
+  <div class="scroll-hint">Scroll</div>
+</section>
+
+<!-- ══ TICKER ══ -->
+<div id="ticker">
+  <div class="ticker-inner" id="tickerInner"></div>
 </div>
 
-<div id="evbar">
-  <div class="evlbl">Active transits</div>
-  <div class="evlist" id="evlist"></div>
-</div>
+<!-- ══ PLANET INTELLIGENCE ══ -->
+<section id="planets">
+  <div class="section-label">Planetary Intelligence</div>
+  <h2 class="section-title reveal">The <span>Cosmic Dashboard</span></h2>
+  <p class="section-sub reveal">Every planet governs specific market sectors. Track their current positions, retrograde cycles, and market signals in real time.</p>
+  <div class="planet-grid" id="planetGrid"></div>
+</section>
 
-<!-- Report Section -->
-<section id="report-section">
-  <h2 class="section-title">Your Financial Report</h2>
-  <p class="section-sub">PERSONALISED · EDUCATIONAL · ASTROLOGICAL</p>
+<!-- ══ COSMIC EVENTS ══ -->
+<section id="events" style="background: radial-gradient(ellipse at 50% 100%, rgba(0,229,255,0.04) 0%, transparent 60%)">
+  <div class="section-label">Active Cosmic Events</div>
+  <h2 class="section-title reveal">Celestial <span>Market Movers</span></h2>
+  <p class="section-sub reveal">Major astronomical events with documented correlations to financial market volatility.</p>
+  <div class="events-grid" id="eventsGrid"></div>
+</section>
 
-  <div class="form-card">
-    <div class="form-group">
-      <label>Full Name</label>
-      <input type="text" id="f-name" placeholder="Your full name">
+<!-- ══ MOON PHASE ══ -->
+<section id="moon">
+  <div class="section-label">Lunar Intelligence</div>
+  <h2 class="section-title reveal">Moon Phase <span>Market Timing</span></h2>
+  <p class="section-sub reveal">Centuries of market data reveal lunar cycles correlate with investor sentiment and volatility windows.</p>
+  <div class="moon-container">
+    <div class="moon-visual">
+      <canvas id="moonCanvas" width="200" height="200" style="animation:moonGlow 4s ease-in-out infinite"></canvas>
+      <div id="moonPhaseName" class="moon-name">Waxing Gibbous</div>
+      <div id="moonNextEvent" class="moon-date">Full Moon in 3 days</div>
+      <div class="moon-phases-row" id="moonPhasesRow"></div>
     </div>
-    <div class="form-group">
-      <label>Email Address</label>
-      <input type="email" id="f-email" placeholder="you@email.com">
+    <div class="moon-info">
+      <div class="moon-tip">
+        <h4>☽ Current Lunar Signal</h4>
+        <p id="moonSignal">Markets tend to build momentum during the waxing phase as collective optimism rises with the illuminating moon.</p>
+      </div>
+      <div class="moon-market-tips" style="margin-top:24px" id="moonTips"></div>
     </div>
-    <div class="form-group">
-      <label>Date of Birth</label>
-      <input type="date" id="f-dob" onchange="fetchPreview()">
-    </div>
-    <div class="form-group">
-      <label>Time of Birth (approx)</label>
-      <input type="time" id="f-tob">
-    </div>
-    <div class="form-group">
-      <label>Place of Birth</label>
-      <input type="text" id="f-pob" placeholder="Delhi, India">
-    </div>
-
-    <div class="preview-box" id="preview-box">
-      <div class="preview-sign" id="preview-sign"></div>
-      <div class="preview-text" id="preview-text"></div>
-      <p style="font-size:11px;color:#555;margin-top:10px">Full report includes planetary transits, favorable periods, wealth insights & PDF delivery to your email.</p>
-    </div>
-
-    <div class="price-box">
-      <div class="price" style="font-size:18px;color:#888;letter-spacing:2px">COMING SOON</div>
-      <div class="price-sub">Full PDF report · Delivered to email · One-time · ₹299</div>
-    </div>
-
-    <button class="pay-btn" id="pay-btn" disabled style="opacity:.5;cursor:not-allowed;background:#444">Full Reports — Coming Soon</button>
-    <p class="disclaimer">For educational & entertainment purposes only. Not financial advice.<br>By proceeding you agree to our <a href="/privacy.html" style="color:#666">Privacy Policy</a> & <a href="/refund.html" style="color:#666">Refund Policy</a>.</p>
   </div>
 </section>
 
+<!-- ══ ZODIAC MAP ══ -->
+<section id="zodiac">
+  <div class="section-label">Zodiac Market Map</div>
+  <h2 class="section-title reveal">12 Signs · <span>12 Market Sectors</span></h2>
+  <p class="section-sub reveal">Each zodiac sign rules specific industries. See which sectors are energized by active planetary transits right now.</p>
+  <div class="zodiac-grid" id="zodiacGrid"></div>
+</section>
+
+<!-- ══ REPORT FORM ══ -->
+<section id="report-section">
+  <div class="section-label">Personal Report</div>
+  <h2 class="section-title reveal" style="text-align:center">Your <span>Cosmic Finance</span> Report</h2>
+  <p class="section-sub reveal" style="text-align:center;margin:0 auto 48px">Enter your birth details to receive a personalized financial astrology analysis based on your natal chart and current transits.</p>
+  <div class="form-container">
+    <div class="form-card">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="name" placeholder="Your full name" autocomplete="name">
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="email" placeholder="report@email.com" autocomplete="email">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Date of Birth</label>
+          <input type="date" id="dob" onchange="updateSunSign()">
+        </div>
+        <div class="form-group">
+          <label>Time of Birth</label>
+          <input type="time" id="tob" placeholder="HH:MM">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Place of Birth</label>
+        <input type="text" id="pob" placeholder="City, Country">
+      </div>
+      <div id="sun-preview">
+        <div class="sign-symbol" id="signSymbol">♈</div>
+        <div class="sign-info">
+          <h4 id="signName">Aries</h4>
+          <p id="signDesc">Your financial personality profile will appear here.</p>
+        </div>
+      </div>
+      <button class="pay-btn" id="pay-btn" disabled>
+        ✦ Full Cosmic Report — Coming Soon
+      </button>
+      <div class="coming-soon-badge">
+        <span>Launching Soon · ₹299</span>
+      </div>
+      <p id="email-tag">Personalized PDF delivered to your inbox</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo">NIVESHSETU</div>
+        <p>Bridging ancient cosmic wisdom with modern financial markets since 2024.</p>
+      </div>
+      <div class="footer-links">
+        <a href="#planets">Planets</a>
+        <a href="#events">Events</a>
+        <a href="#moon">Moon</a>
+        <a href="#zodiac">Zodiac</a>
+        <a href="#report-section">Reports</a>
+      </div>
+    </div>
+    <div class="disclaimer">
+      NiveshSetu provides educational astrology content for entertainment purposes only. Nothing on this website constitutes financial advice, investment recommendations, or trading signals. Planetary positions and astrological interpretations are based on traditional astrological frameworks. Always consult a SEBI-registered financial advisor before making investment decisions.
+    </div>
+    <div class="footer-bottom">
+      <span>© 2024–2025 NiveshSetu · niveshsetu.xyz</span>
+      <span class="nasa-credit">Planetary data reference: NASA JPL Horizons</span>
+    </div>
+  </div>
+</footer>
+
 <script>
-const PLANETS = [
-  { n:'Mercury', s:'☿', sub:'The Messenger', c:'#b0b0c8', g:'#d0d0f0', or:.17, sz:4.5, pd:88,    sign:'Scorpio',    rx:false, desc:'Rules communication, contracts, travel and the rational mind.', eff:'Direct — clear thinking, smooth travel. Great time to sign agreements.', effR:'Retrograde — miscommunications, tech glitches, travel delays.' },
-  { n:'Venus',   s:'♀', sub:'The Lover',     c:'#f5e098', g:'#ffe8a0', or:.26, sz:6,   pd:225,   sign:'Sagittarius', rx:false, desc:'Rules love, beauty, relationships and financial flow.', eff:'Direct — magnetic energy for love and finances.', effR:'Retrograde — avoid major purchases or relationship decisions.' },
-  { n:'Earth',   s:'⊕', sub:'The Observer',  c:'#5a9fd4', g:'#7ab8f0', or:.35, sz:6,   pd:365,   sign:'—',           rx:false, desc:'Your home base. The reference point from which retrograde motion is observed.', eff:'You are here.', effR:'' },
-  { n:'Mars',    s:'♂', sub:'The Warrior',   c:'#d45a3a', g:'#f07858', or:.44, sz:5,   pd:687,   sign:'Leo',         rx:false, desc:'Rules action, ambition and raw physical energy.', eff:'Direct in Leo — bold confidence. Start new ventures now.', effR:'Retrograde — frustration, blocked energy. Avoid conflict.' },
-  { n:'Jupiter', s:'♃', sub:'The Expander',  c:'#d4a060', g:'#f0c07a', or:.555,sz:13,  pd:4333,  sign:'Virgo',       rx:true,  desc:'Rules luck, wisdom and abundance. The great benefic.', eff:'Direct — doors open, opportunities expand.', effR:'Retrograde in Virgo — revisit health routines. Inner growth over outer expansion.' },
-  { n:'Saturn',  s:'♄', sub:'The Teacher',   c:'#e8d898', g:'#f8e8b0', or:.655,sz:10,  pd:10759, sign:'Aries',       rx:true,  rings:true, desc:'Rules discipline, karma and long-term lessons.', eff:'Direct — build seriously, commit to structures.', effR:'Retrograde in Aries — karmic review of identity and impulsive actions.' },
-  { n:'Uranus',  s:'♅', sub:'The Rebel',     c:'#7de8e8', g:'#a0f4f4', or:.755,sz:8,   pd:30687, sign:'Gemini',      rx:true,  desc:'Rules revolution, innovation and sudden breakthroughs.', eff:'Direct — unexpected changes arrive fast.', effR:'Retrograde in Gemini — internal revolution in thinking and communication.' },
-  { n:'Neptune', s:'♆', sub:'The Mystic',    c:'#5576e8', g:'#7898ff', or:.86, sz:8,   pd:60190, sign:'Aries',       rx:true,  desc:'Rules dreams, illusions and spiritual connection.', eff:'Direct — heightened intuition and creative flow.', effR:'Retrograde in Aries — illusions about self dissolve. Rare clarity emerges.' },
-]
-
-const cv = document.getElementById('solar'), ctx = cv.getContext('2d')
-let W,H,cx,cy,maxR,stars=[],angs=[],ppos=[],aid
-
-function resize() {
-  const dpr=window.devicePixelRatio||1
-  W=window.innerWidth; H=window.innerHeight
-  cv.width=W*dpr; cv.height=H*dpr; cv.style.width=W+'px'; cv.style.height=H+'px'
-  ctx.scale(dpr,dpr); cx=W/2; cy=H/2; maxR=Math.min(W,H)*.43
-  stars=Array.from({length:260},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.4,ph:Math.random()*Math.PI*2,sp:.0007+Math.random()*.0018}))
-}
-
-function initAngs() {
-  const d=(Date.now()-new Date('2000-01-01T12:00:00Z').getTime())/86400000
-  const off=[.5,1.2,2.1,3.8,.9,4.2,1.7,5.1]
-  angs=PLANETS.map((p,i)=>((d/p.pd)*Math.PI*2+off[i])%(Math.PI*2))
-}
-
-function dk(h){const r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16);return `rgb(${Math.floor(r*.4)},${Math.floor(g*.4)},${Math.floor(b*.4)})`}
-
-function draw(t) {
-  ctx.fillStyle='#00020f'; ctx.fillRect(0,0,W,H)
-  for(const s of stars){const a=.2+.6*Math.abs(Math.sin(t*s.sp+s.ph));ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(255,255,255,${a})`;ctx.fill()}
-  for(const p of PLANETS){if(p.n==='Earth')continue;ctx.beginPath();ctx.arc(cx,cy,p.or*maxR,0,Math.PI*2);ctx.strokeStyle=p.rx?'rgba(255,80,80,.13)':'rgba(255,255,255,.055)';ctx.lineWidth=.5;ctx.setLineDash(p.rx?[2,5]:[]);ctx.stroke();ctx.setLineDash([])}
-  const pulse=26+7*Math.sin(t*.001);ctx.shadowBlur=pulse;ctx.shadowColor='#ff8800'
-  const sg=ctx.createRadialGradient(cx,cy,0,cx,cy,21);sg.addColorStop(0,'#fff9e8');sg.addColorStop(.4,'#ffaa30');sg.addColorStop(1,'#ff5000')
-  ctx.beginPath();ctx.arc(cx,cy,21,0,Math.PI*2);ctx.fillStyle=sg;ctx.fill();ctx.shadowBlur=0
-  for(let i=0;i<3;i++){const r=30+i*12+4*Math.sin(t*.0007+i);ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.strokeStyle=`rgba(255,130,0,${.16-i*.04})`;ctx.lineWidth=1.4-i*.3;ctx.stroke()}
-  ppos=[]
-  for(let i=0;i<PLANETS.length;i++){
-    const p=PLANETS[i];angs[i]+=(.00013*365/p.pd)*(p.rx?-.06:1)
-    const r=p.or*maxR,px=cx+r*Math.cos(angs[i]),py=cy+r*Math.sin(angs[i]);ppos.push({x:px,y:py,sz:p.sz,i})
-    if(p.rings){ctx.beginPath();ctx.ellipse(px,py,p.sz*2.35,p.sz*.58,-0.35,0,Math.PI*2);ctx.strokeStyle=p.c+'88';ctx.lineWidth=3;ctx.stroke()}
-    ctx.shadowBlur=p.sz*2.8;ctx.shadowColor=p.g;ctx.beginPath();ctx.arc(px,py,p.sz,0,Math.PI*2)
-    const pg=ctx.createRadialGradient(px-p.sz*.35,py-p.sz*.35,0,px,py,p.sz);pg.addColorStop(0,'rgba(255,255,255,.95)');pg.addColorStop(.35,p.c);pg.addColorStop(1,dk(p.c))
-    ctx.fillStyle=pg;ctx.fill();ctx.shadowBlur=0
-    if(p.rings){ctx.save();ctx.beginPath();ctx.ellipse(px,py,p.sz*2.35,p.sz*.58,-0.35,0,Math.PI);ctx.strokeStyle=p.c+'55';ctx.lineWidth=2.5;ctx.stroke();ctx.restore()}
-    if(p.rx){const bx=px+p.sz+3,by=py-p.sz-3;ctx.beginPath();ctx.arc(bx,by,7,0,Math.PI*2);ctx.fillStyle='rgba(210,35,35,.95)';ctx.fill();ctx.font='bold 8px serif';ctx.fillStyle='#fff';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('℞',bx,by)}
-    ctx.font='9px "Space Grotesk",system-ui,sans-serif';ctx.fillStyle='rgba(255,255,255,.48)';ctx.textAlign='center';ctx.textBaseline='top';ctx.fillText(p.n,px,py+p.sz+5)
+// ══ STARFIELD ══
+(function() {
+  const c = document.getElementById('starfield');
+  const ctx = c.getContext('2d');
+  let stars = [], shooters = [], W, H;
+  function resize() {
+    W = c.width = c.offsetWidth; H = c.height = c.offsetHeight;
+    stars = Array.from({length: 280}, () => ({
+      x: Math.random()*W, y: Math.random()*H,
+      r: Math.random()*1.4+0.2, o: Math.random()*0.7+0.1,
+      s: Math.random()*0.003+0.001
+    }));
   }
-  aid=requestAnimationFrame(draw)
-}
-
-function hit(mx,my){for(const h of [...ppos].reverse()){if(Math.hypot(mx-h.x,my-h.y)<h.sz+18)return PLANETS[h.i]}return null}
-
-function showPnl(p){
-  document.getElementById('psym').textContent=p.s;document.getElementById('pname').textContent=p.n;document.getElementById('psub').textContent=p.sub
-  document.getElementById('psign').textContent=p.sign;document.getElementById('pper').textContent=p.pd>=365?(p.pd/365.25).toFixed(1)+' yrs':p.pd+' days'
-  document.getElementById('pdesc').textContent=p.desc
-  const eff=document.getElementById('peffect'),bdg=document.getElementById('pbadge')
-  if(p.n==='Earth'){bdg.textContent='⊕ You are here';bdg.className='badge home';eff.textContent=p.eff;eff.style.borderColor='#5a9fd4'}
-  else if(p.rx){bdg.textContent='℞ Retrograde';bdg.className='badge rx';eff.textContent=p.effR;eff.style.borderColor='#ff5555'}
-  else{bdg.textContent='↗ Direct';bdg.className='badge dir';eff.textContent=p.eff;eff.style.borderColor='#55bb80'}
-  document.getElementById('pnl').classList.add('open')
-}
-function closePnl(){document.getElementById('pnl').classList.remove('open')}
-
-const el=document.getElementById('evlist')
-for(const p of PLANETS){if(p.n==='Earth')continue;const t=document.createElement('div');t.className='evtag '+(p.rx?'rx':'dir');t.textContent=p.rx?`${p.s} ${p.n} ℞`:`${p.s} ${p.n} ↗`;t.onclick=()=>showPnl(p);el.appendChild(t)}
-
-const rc=()=>cv.getBoundingClientRect()
-cv.addEventListener('click',e=>{const r=rc(),p=hit(e.clientX-r.left,e.clientY-r.top);p?showPnl(p):closePnl()})
-cv.addEventListener('touchend',e=>{e.preventDefault();const t=e.changedTouches[0],r=rc(),p=hit(t.clientX-r.left,t.clientY-r.top);if(p)showPnl(p)},{passive:false})
-window.addEventListener('resize',()=>{cancelAnimationFrame(aid);resize();aid=requestAnimationFrame(draw)})
-resize();initAngs();aid=requestAnimationFrame(draw)
-
-// ── Report form ──
-async function fetchPreview() {
-  const dob = document.getElementById('f-dob').value
-  if (!dob) return
-  try {
-    const res = await fetch('/api/report/preview', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({dob}) })
-    const data = await res.json()
-    document.getElementById('preview-sign').textContent = `☀ ${data.sunSign}`
-    document.getElementById('preview-text').textContent = data.preview
-    document.getElementById('preview-box').style.display = 'block'
-  } catch(e) {}
-}
-
-async function startPayment() {
-  const name  = document.getElementById('f-name').value.trim()
-  const email = document.getElementById('f-email').value.trim()
-  const dob   = document.getElementById('f-dob').value
-  const tob   = document.getElementById('f-tob').value
-  const pob   = document.getElementById('f-pob').value.trim()
-
-  if (!name || !email || !dob) { alert('Please fill Name, Email and Date of Birth.'); return }
-
-  const btn = document.getElementById('pay-btn')
-  btn.disabled = true; btn.textContent = 'Creating order...'
-
-  try {
-    const res = await fetch('/api/payment/create-order', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({amount:299,name,email,dob,tob,pob}) })
-    const { orderId } = await res.json()
-
-    const rzp = new Razorpay({
-      key: 'YOUR_RAZORPAY_KEY_ID',
-      amount: 29900,
-      currency: 'INR',
-      name: 'NiveshSetu',
-      description: 'Financial Astrology Report',
-      order_id: orderId,
-      handler: async (response) => {
-        const vres = await fetch('/api/payment/verify', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({...response, userData:{name,email,dob,tob,pob}}) })
-        const vdata = await vres.json()
-        if (vdata.success) {
-          btn.textContent = '✓ Report will be emailed to you!'
-          btn.style.background = '#2d7a4f'
-          btn.style.color = '#fff'
-        }
-      },
-      prefill: { name, email },
-      theme: { color: '#c9a227' },
-    })
-    rzp.open()
-  } catch(e) {
-    alert('Something went wrong. Please try again.')
+  function addShooter() {
+    shooters.push({ x: Math.random()*W*0.7, y: Math.random()*H*0.4, vx:4+Math.random()*4, vy:2+Math.random()*3, life:1, tail:[] });
   }
-  btn.disabled = false
-  if (btn.textContent === 'Creating order...') btn.textContent = 'Get Full Report — ₹299'
+  setInterval(addShooter, 2800);
+  function draw() {
+    ctx.clearRect(0,0,W,H);
+    stars.forEach(s => {
+      s.o += s.s; if (s.o>0.8||s.o<0.1) s.s=-s.s;
+      ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(255,255,255,${s.o})`; ctx.fill();
+    });
+    shooters = shooters.filter(s => {
+      s.tail.push({x:s.x,y:s.y,life:s.life});
+      s.x+=s.vx; s.y+=s.vy; s.life-=0.03;
+      s.tail.forEach((t,i) => {
+        ctx.beginPath(); ctx.moveTo(t.x,t.y);
+        const next=s.tail[i+1]||{x:s.x,y:s.y};
+        ctx.lineTo(next.x,next.y);
+        ctx.strokeStyle=`rgba(255,255,220,${t.life*0.6})`;
+        ctx.lineWidth=1.5; ctx.stroke();
+      });
+      if (s.tail.length>18) s.tail.shift();
+      return s.life>0 && s.x<W+50 && s.y<H+50;
+    });
+    requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize', resize); resize(); draw();
+})();
+
+// ══ SOLAR SYSTEM ══
+(function() {
+  const c = document.getElementById('solarCanvas');
+  const ctx = c.getContext('2d');
+  let W, H, t = 0;
+  const planets = [
+    { name:'☿', r:60, speed:4.2, size:3, color:'#aaa' },
+    { name:'♀', r:95, speed:2.6, size:4, color:'#e8c96a' },
+    { name:'♂', r:135, speed:2.0, size:3.5, color:'#e05a2b' },
+    { name:'♃', r:185, speed:0.8, size:7, color:'#c9956a' },
+    { name:'♄', r:235, speed:0.6, size:6, color:'#c9b96a', ring:true },
+  ];
+  function resize() { W = c.width = c.offsetWidth; H = c.height = c.offsetHeight; }
+  function draw() {
+    ctx.clearRect(0,0,W,H);
+    const cx = W/2, cy = H/2;
+    t += 0.004;
+    // zodiac ring
+    ctx.beginPath(); ctx.arc(cx,cy,Math.min(W,H)*0.38,0,Math.PI*2);
+    ctx.strokeStyle='rgba(245,200,66,0.08)'; ctx.lineWidth=28; ctx.stroke();
+    ctx.beginPath(); ctx.arc(cx,cy,Math.min(W,H)*0.38,0,Math.PI*2);
+    ctx.strokeStyle='rgba(245,200,66,0.15)'; ctx.lineWidth=0.5; ctx.stroke();
+    const zodiac=['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'];
+    zodiac.forEach((z,i) => {
+      const a = (i/12)*Math.PI*2 - Math.PI/2;
+      const rd = Math.min(W,H)*0.38;
+      ctx.font=`${Math.min(14,W/55)}px serif`; ctx.fillStyle='rgba(245,200,66,0.45)';
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText(z, cx+Math.cos(a)*rd, cy+Math.sin(a)*rd);
+    });
+    // orbit rings
+    planets.forEach(p => {
+      ctx.beginPath(); ctx.arc(cx,cy,p.r,0,Math.PI*2);
+      ctx.strokeStyle='rgba(255,255,255,0.06)'; ctx.lineWidth=0.5; ctx.stroke();
+    });
+    // sun
+    const sg = ctx.createRadialGradient(cx,cy,0,cx,cy,32);
+    sg.addColorStop(0,'rgba(255,220,80,1)'); sg.addColorStop(0.5,'rgba(255,160,20,0.7)'); sg.addColorStop(1,'rgba(255,80,0,0)');
+    ctx.beginPath(); ctx.arc(cx,cy,32,0,Math.PI*2); ctx.fillStyle=sg; ctx.fill();
+    // glow
+    const gl = ctx.createRadialGradient(cx,cy,0,cx,cy,70);
+    gl.addColorStop(0,'rgba(255,200,40,0.15)'); gl.addColorStop(1,'transparent');
+    ctx.beginPath(); ctx.arc(cx,cy,70,0,Math.PI*2); ctx.fillStyle=gl; ctx.fill();
+    // planets
+    planets.forEach(p => {
+      const a = t*p.speed; const px=cx+Math.cos(a)*p.r, py=cy+Math.sin(a)*p.r;
+      if (p.ring) {
+        ctx.beginPath(); ctx.ellipse(px,py,p.size*2.2,p.size*0.7,a,0,Math.PI*2);
+        ctx.strokeStyle='rgba(201,185,106,0.5)'; ctx.lineWidth=1.5; ctx.stroke();
+      }
+      const pg = ctx.createRadialGradient(px,py,0,px,py,p.size*2);
+      pg.addColorStop(0,p.color); pg.addColorStop(1,'transparent');
+      ctx.beginPath(); ctx.arc(px,py,p.size,0,Math.PI*2); ctx.fillStyle=p.color; ctx.fill();
+      ctx.beginPath(); ctx.arc(px,py,p.size*2.5,0,Math.PI*2); ctx.fillStyle=pg; ctx.fill();
+      ctx.font=`${Math.max(9,p.size+7)}px serif`; ctx.fillStyle='rgba(255,255,255,0.6)';
+      ctx.textAlign='center'; ctx.textBaseline='bottom';
+      ctx.fillText(p.name, px, py-p.size-4);
+    });
+    requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize', resize); resize(); draw();
+})();
+
+// ══ TICKER DATA ══
+const tickerData = [
+  { icon:'☿', name:'Mercury in Libra', tag:'Tech/Comms', text:'Communication stocks in balance phase' },
+  { icon:'♀', name:'Venus in Scorpio', tag:'Luxury', text:'Consumer discretionary transformation' },
+  { icon:'♂', name:'Mars in Leo', tag:'Energy', text:'Bold energy sector moves expected' },
+  { icon:'♃', name:'Jupiter Rx Virgo', tag:'Finance', text:'Financial sector review underway' },
+  { icon:'♄', name:'Saturn Rx Aries', tag:'Real Estate', text:'Infrastructure projects face delays' },
+  { icon:'♅', name:'Uranus Rx Gemini', tag:'Crypto', text:'Crypto volatility amplified in retrograde' },
+  { icon:'♆', name:'Neptune Rx Aries', tag:'Oil/Gas', text:'Energy illusions — verify oil data' },
+  { icon:'♇', name:'Pluto in Aquarius', tag:'Fintech', text:'Deep transformation in banking systems' },
+  { icon:'☽', name:'Waxing Gibbous Moon', tag:'Sentiment', text:'Bullish sentiment building momentum' },
+  { icon:'☀', name:'Sun in Libra', tag:'Markets', text:'Balance-seeking energy in global markets' },
+  { icon:'⚡', name:'Solar Activity', tag:'NASA', text:'Geomagnetic storm watch — volatility alert' },
+];
+(function() {
+  const inner = document.getElementById('tickerInner');
+  const all = [...tickerData, ...tickerData];
+  inner.innerHTML = all.map(d =>
+    `<span class="ticker-item"><span class="planet-icon">${d.icon}</span><span class="event-name">${d.name}</span><span class="market-tag">${d.tag}</span><span style="color:rgba(255,255,255,0.4)">${d.text}</span><span class="ticker-sep">|</span></span>`
+  ).join('');
+})();
+
+// ══ PLANET CARDS ══
+const planetData = [
+  {
+    symbol:'☿', name:'Mercury', position:'Libra', sign:'♎',
+    sectors:'Technology · Communications · Transport',
+    insight:'Mercury in Libra favors balanced tech negotiations, diplomatic comms deals. Watch for M&A activity in telecom and social media platforms.',
+    sentiment:65, retro:false,
+    color:'#a8c0d6', bg:'rgba(168,192,214,0.1)', glow:'rgba(168,192,214,0.15)'
+  },
+  {
+    symbol:'♀', name:'Venus', position:'Scorpio', sign:'♏',
+    sectors:'Luxury Goods · Consumer Staples · Arts',
+    insight:'Venus in Scorpio intensifies desire-driven spending. Deep value investments in luxury and beauty sectors may be rewarded.',
+    sentiment:72, retro:false,
+    color:'#e8c96a', bg:'rgba(232,201,106,0.1)', glow:'rgba(232,201,106,0.15)'
+  },
+  {
+    symbol:'♂', name:'Mars', position:'Leo', sign:'♌',
+    sectors:'Energy · Defense · Metals',
+    insight:'Mars in Leo amplifies bold moves in energy and defense. Leadership changes in major energy conglomerates likely. High speculation energy.',
+    sentiment:80, retro:false,
+    color:'#e05a2b', bg:'rgba(224,90,43,0.1)', glow:'rgba(224,90,43,0.15)'
+  },
+  {
+    symbol:'♃', name:'Jupiter', position:'Virgo ℞', sign:'♍',
+    sectors:'Finance · Law · International Trade',
+    insight:'Jupiter retrograde in Virgo triggers financial regulation reviews. Banks and legal sectors under scrutiny. Internal restructuring favored.',
+    sentiment:40, retro:true,
+    color:'#c9956a', bg:'rgba(201,149,106,0.1)', glow:'rgba(201,149,106,0.15)'
+  },
+  {
+    symbol:'♄', name:'Saturn', position:'Aries ℞', sign:'♈',
+    sectors:'Real Estate · Infrastructure · Utilities',
+    insight:'Saturn retrograde in Aries creates friction for new construction projects. Existing infrastructure plays safer. REITs in consolidation mode.',
+    sentiment:35, retro:true,
+    color:'#b8a87a', bg:'rgba(184,168,122,0.1)', glow:'rgba(184,168,122,0.15)'
+  },
+  {
+    symbol:'♅', name:'Uranus', position:'Gemini ℞', sign:'♊',
+    sectors:'Crypto · Innovation · Electric Vehicles',
+    insight:'Uranus retrograde in Gemini brings chaotic reversals in crypto and AI stocks. Information asymmetry creates short-term volatility.',
+    sentiment:45, retro:true,
+    color:'#7ec8e3', bg:'rgba(126,200,227,0.1)', glow:'rgba(126,200,227,0.15)'
+  },
+  {
+    symbol:'♆', name:'Neptune', position:'Aries ℞', sign:'♈',
+    sectors:'Oil · Gas · Pharma · Spirituality',
+    insight:'Neptune retrograde in Aries dissolves energy sector illusions. Pharma drug approval timelines may face unexpected reversals.',
+    sentiment:30, retro:true,
+    color:'#5b7fd4', bg:'rgba(91,127,212,0.1)', glow:'rgba(91,127,212,0.15)'
+  },
+  {
+    symbol:'♇', name:'Pluto', position:'Aquarius', sign:'♒',
+    sectors:'Banking · Blockchain · Power Systems',
+    insight:'Pluto in Aquarius drives generational transformation in global banking. Decentralized finance and CBDC developments accelerate.',
+    sentiment:70, retro:false,
+    color:'#8e6abf', bg:'rgba(142,106,191,0.1)', glow:'rgba(142,106,191,0.15)'
+  }
+];
+
+const grid = document.getElementById('planetGrid');
+planetData.forEach(p => {
+  const card = document.createElement('div');
+  card.className = 'planet-card reveal';
+  card.style.setProperty('--planet-color', p.color);
+  card.style.setProperty('--planet-bg', p.bg);
+  card.style.setProperty('--glow', p.glow);
+  card.innerHTML = `
+    <div class="planet-card-header">
+      <div class="planet-symbol">${p.symbol}</div>
+      <div>
+        <div class="planet-name">${p.name}</div>
+        <div class="planet-position">${p.sign} ${p.position.replace(' ℞','')}</div>
+        ${p.retro ? '<span class="planet-retro">℞ RETROGRADE</span>' : ''}
+      </div>
+    </div>
+    <div class="planet-sector">${p.sectors}</div>
+    <div class="planet-insight">${p.insight}</div>
+    <div class="sentiment-bar"><div class="sentiment-fill" style="width:${p.sentiment}%"></div></div>
+    <div class="sentiment-labels"><span>Bearish</span><span>Market Sentiment ${p.sentiment}%</span><span>Bullish</span></div>
+  `;
+  grid.appendChild(card);
+});
+
+// ══ COSMIC EVENTS ══
+const eventsData = [
+  {
+    icon:'🌑', iconBg:'rgba(0,0,0,0.4)', title:'Solar Eclipse — Libra',
+    date:'October 2026', impact:'high',
+    desc:'Total solar eclipse in Libra conjunct the financial axis. Historically correlates with major policy shifts in central banking and currency markets.'
+  },
+  {
+    icon:'♃', iconBg:'rgba(201,149,106,0.15)', title:'Jupiter Retrograde Station',
+    date:'Sep 2026 – Feb 2027', impact:'med',
+    desc:'Jupiter stationing retrograde in Virgo signals a period of financial introspection. Markets may recalibrate overextended valuations in banking.'
+  },
+  {
+    icon:'⚡', iconBg:'rgba(255,68,68,0.1)', title:'Geomagnetic Storm Watch',
+    date:'NASA NOAA Alert', impact:'high',
+    desc:'Elevated solar activity (G2-class geomagnetic storm). Historical studies link strong geomagnetic events to short-term bearish market sentiment.'
+  },
+  {
+    icon:'♄', iconBg:'rgba(184,168,122,0.15)', title:'Saturn–Neptune Mutual Reception',
+    date:'2026 Q4', impact:'med',
+    desc:'Rare Saturn–Neptune energy exchange dissolves rigid structures in real estate and energy sectors. Creative financial instruments may emerge.'
+  },
+  {
+    icon:'☽', iconBg:'rgba(200,200,255,0.1)', title:'Full Moon in Aries',
+    date:'Oct 13, 2026', impact:'low',
+    desc:'Full moon opposite the Libra sun activates impulsive market behavior. Options expiry week may see amplified intraday swings.'
+  },
+  {
+    icon:'♅', iconBg:'rgba(126,200,227,0.1)', title:'Uranus Direct Station',
+    date:'January 2027', impact:'med',
+    desc:'Uranus turning direct in Gemini unleashes pent-up innovation. Crypto and AI sectors may experience breakout rallies as new narratives emerge.'
+  }
+];
+
+const evGrid = document.getElementById('eventsGrid');
+eventsData.forEach(e => {
+  const card = document.createElement('div');
+  card.className = 'event-card reveal';
+  card.innerHTML = `
+    <div class="event-icon" style="background:${e.iconBg}">${e.icon}</div>
+    <div class="event-body">
+      <div class="event-title">${e.title}</div>
+      <div class="event-date">${e.date}</div>
+      <div class="event-desc">${e.desc}</div>
+      <span class="event-impact impact-${e.impact}">${e.impact === 'high' ? '🔴 High Impact' : e.impact === 'med' ? '🟡 Medium Impact' : '🟢 Low Impact'}</span>
+    </div>
+  `;
+  evGrid.appendChild(card);
+});
+
+// ══ MOON PHASE ══
+(function() {
+  const canvas = document.getElementById('moonCanvas');
+  const ctx = canvas.getContext('2d');
+  const now = new Date();
+  const knownNewMoon = new Date('2026-10-03');
+  const daysSince = (now - knownNewMoon) / 86400000;
+  const lunation = 29.53;
+  const phase = ((daysSince % lunation) + lunation) % lunation;
+  const illumination = phase < lunation/2 ? phase/(lunation/2) : (lunation-phase)/(lunation/2);
+  const W = 200, H = 200;
+
+  function drawMoon() {
+    ctx.clearRect(0,0,W,H);
+    const cx=W/2, cy=H/2, r=80;
+    ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
+    ctx.fillStyle='rgba(40,40,60,0.8)'; ctx.fill();
+    ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
+    const isWaxing = phase < lunation/2;
+    const lit = illumination;
+    ctx.save(); ctx.clip();
+    const xOffset = (1 - lit) * r * 2 * (isWaxing ? -1 : 1);
+    ctx.beginPath(); ctx.arc(cx + (isWaxing ? r*(1-lit*2) : -r*(1-lit*2)),cy,r,0,Math.PI*2);
+    ctx.fillStyle='rgba(220,220,240,0.9)'; ctx.fill();
+    ctx.restore();
+    ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
+    ctx.strokeStyle='rgba(255,255,255,0.15)'; ctx.lineWidth=1; ctx.stroke();
+  }
+  drawMoon();
+
+  const phaseNames = ['New Moon','Waxing Crescent','First Quarter','Waxing Gibbous','Full Moon','Waning Gibbous','Last Quarter','Waning Crescent'];
+  const phaseIdx = Math.floor(phase / (lunation/8));
+  document.getElementById('moonPhaseName').textContent = phaseNames[phaseIdx];
+  const daysToFull = phase < lunation/2 ? (lunation/2 - phase).toFixed(0) : (lunation - phase + lunation/2).toFixed(0);
+  document.getElementById('moonNextEvent').textContent = phase < lunation/2 ? `Full Moon in ${daysToFull} days` : `New Moon in ${(lunation-phase).toFixed(0)} days`;
+
+  const signals = ['New Moon: Low volatility — accumulation phase for long-term investors.','Waxing Crescent: Cautious optimism builds. Good for new position entries.','First Quarter: Tension and decision points. Market makers active.','Waxing Gibbous: Momentum builds. Trend-following strategies favored.','Full Moon: Peak volatility and sentiment reversal. Exercise caution.','Waning Gibbous: Distribution phase begins. Consider partial profit booking.','Last Quarter: Consolidation. Review and rebalance portfolios.','Waning Crescent: Quiet accumulation for the next cycle ahead.'];
+  document.getElementById('moonSignal').textContent = signals[phaseIdx];
+
+  const phases8 = [{n:'🌑',label:'New'},{n:'🌒',label:'Crescent'},{n:'🌓',label:'1st Qtr'},{n:'🌔',label:'Gibbous'},{n:'🌕',label:'Full'},{n:'🌖',label:'Waning'},{n:'🌗',label:'3rd Qtr'},{n:'🌘',label:'Dark'}];
+  const row = document.getElementById('moonPhasesRow');
+  phases8.forEach((p,i) => {
+    const d = document.createElement('div');
+    d.className = 'moon-phase-dot';
+    d.innerHTML = `<div class="phase-circle ${i===phaseIdx?'active':''}" style="background:${i===phaseIdx?'rgba(245,200,66,0.2)':'rgba(255,255,255,0.05)'}; display:flex;align-items:center;justify-content:center;font-size:18px">${p.n}</div><span>${p.label}</span>`;
+    row.appendChild(d);
+  });
+
+  const tips = [
+    { icon:'📈', title:'New Moon — Plant Seeds', desc:'Initiate long-term positions. Low noise, high conviction entry window.' },
+    { icon:'⚡', title:'Full Moon — Harvest & Review', desc:'Historically correlated with volatility spikes. Take profits, manage risk.' },
+    { icon:'🔄', title:'Quarter Moons — Pivots', desc:'First and Third Quarters mark inflection points and trend reversals.' },
+    { icon:'🌙', title:'Dark Moon — Rest & Prepare', desc:'Market consolidation phase. Research and prepare watchlists.' }
+  ];
+  const tipsEl = document.getElementById('moonTips');
+  tips.forEach(t => {
+    const d = document.createElement('div');
+    d.className = 'moon-tip-item';
+    d.innerHTML = `<div class="moon-tip-icon">${t.icon}</div><div class="moon-tip-text"><h5>${t.title}</h5><p>${t.desc}</p></div>`;
+    tipsEl.appendChild(d);
+  });
+})();
+
+// ══ ZODIAC GRID ══
+const zodiacData = [
+  { symbol:'♈', name:'Aries', sector:'Metals, Defense, Sports', planet:'♂ Mars' },
+  { symbol:'♉', name:'Taurus', sector:'Banking, Agriculture, Real Estate', planet:'♀ Venus' },
+  { symbol:'♊', name:'Gemini', sector:'Media, Telecom, Logistics', planet:'☿ Mercury' },
+  { symbol:'♋', name:'Cancer', sector:'Food, Housing, Silver', planet:'☽ Moon' },
+  { symbol:'♌', name:'Leo', sector:'Gold, Entertainment, Politics', planet:'☀ Sun' },
+  { symbol:'♍', name:'Virgo', sector:'Healthcare, Analytics, Labour', planet:'☿ Mercury' },
+  { symbol:'♎', name:'Libra', sector:'Fashion, Judiciary, Diplomacy', planet:'♀ Venus' },
+  { symbol:'♏', name:'Scorpio', sector:'Mining, Insurance, Inheritance', planet:'♇ Pluto' },
+  { symbol:'♐', name:'Sagittarius', sector:'Travel, Education, Religion', planet:'♃ Jupiter' },
+  { symbol:'♑', name:'Capricorn', sector:'Infrastructure, Government, Coal', planet:'♄ Saturn' },
+  { symbol:'♒', name:'Aquarius', sector:'Technology, Crypto, Aviation', planet:'♅ Uranus' },
+  { symbol:'♓', name:'Pisces', sector:'Oil, Pharma, Spirituality', planet:'♆ Neptune' },
+];
+const activeSigns = ['Libra','Scorpio','Leo','Virgo','Aquarius'];
+const zGrid = document.getElementById('zodiacGrid');
+zodiacData.forEach(z => {
+  const d = document.createElement('div');
+  d.className = 'zodiac-card reveal' + (activeSigns.includes(z.name) ? ' active' : '');
+  d.innerHTML = `
+    <div class="zodiac-symbol">${z.symbol}</div>
+    <div class="zodiac-name">${z.name}</div>
+    <div class="zodiac-sector">${z.sector}</div>
+    <div class="zodiac-planet">${z.planet}</div>
+  `;
+  zGrid.appendChild(d);
+});
+
+// ══ SUN SIGN PREVIEW ══
+const signData = {
+  Aries:   { sym:'♈', desc:'Bold and impulsive with money — high risk, high reward energy. Pioneer investor, first-mover advantage is your strength.' },
+  Taurus:  { sym:'♉', desc:'Natural wealth builder — patient, steady, loves security. Excellent at long-term value investing and real estate.' },
+  Gemini:  { sym:'♊', desc:'Multiple income streams suit you. Variety in investments works best. Quick to spot trends but avoid overtrading.' },
+  Cancer:  { sym:'♋', desc:'Emotionally tied to money — home and family drive financial goals. Defensive, blue-chip investments aligned with your nature.' },
+  Leo:     { sym:'♌', desc:'Generous with spending, needs to balance luxury with savings. Natural entrepreneur energy; gold and luxury assets attract you.' },
+  Virgo:   { sym:'♍', desc:'Detail-oriented and analytical — excellent at budgeting. Systematic approach to SIPs and portfolio rebalancing.' },
+  Libra:   { sym:'♎', desc:'Seeks financial balance — good at partnerships and negotiations. Fair-value investor; avoid analysis paralysis.' },
+  Scorpio: { sym:'♏', desc:'Intensely strategic — excellent for long-term wealth building. Deep research capability; drawn to turnaround stories.' },
+  Sagittarius: { sym:'♐', desc:'Optimistic but can overspend — international opportunities favored. Thematic macro investing suits your global perspective.' },
+  Capricorn:   { sym:'♑', desc:'Disciplined wealth builder — most naturally business-minded sign. Systematic compounding through equities and real assets.' },
+  Aquarius:    { sym:'♒', desc:'Innovative approach to money — drawn to new-age assets. Early adopter advantage in fintech and crypto ecosystems.' },
+  Pisces:      { sym:'♓', desc:'Intuitive but needs structure — creative income sources suit well. Best to set automated investment rules to avoid emotional decisions.' }
+};
+function getSunSign(dob) {
+  const d = new Date(dob), m = d.getMonth()+1, day = d.getDate();
+  if ((m===3&&day>=21)||(m===4&&day<=19)) return 'Aries';
+  if ((m===4&&day>=20)||(m===5&&day<=20)) return 'Taurus';
+  if ((m===5&&day>=21)||(m===6&&day<=20)) return 'Gemini';
+  if ((m===6&&day>=21)||(m===7&&day<=22)) return 'Cancer';
+  if ((m===7&&day>=23)||(m===8&&day<=22)) return 'Leo';
+  if ((m===8&&day>=23)||(m===9&&day<=22)) return 'Virgo';
+  if ((m===9&&day>=23)||(m===10&&day<=22)) return 'Libra';
+  if ((m===10&&day>=23)||(m===11&&day<=21)) return 'Scorpio';
+  if ((m===11&&day>=22)||(m===12&&day<=21)) return 'Sagittarius';
+  if ((m===12&&day>=22)||(m===1&&day<=19)) return 'Capricorn';
+  if ((m===1&&day>=20)||(m===2&&day<=18)) return 'Aquarius';
+  return 'Pisces';
 }
+function updateSunSign() {
+  const dob = document.getElementById('dob').value;
+  if (!dob) return;
+  const sign = getSunSign(dob);
+  const data = signData[sign];
+  document.getElementById('signSymbol').textContent = data.sym;
+  document.getElementById('signName').textContent = sign + ' — Your Financial Archetype';
+  document.getElementById('signDesc').textContent = data.desc;
+  document.getElementById('sun-preview').classList.add('visible');
+}
+
+// ══ SCROLL REVEAL ══
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>
 </body>
 </html>
