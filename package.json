@@ -1,0 +1,26 @@
+{
+  "name": "astrofinance",
+  "version": "1.0.0",
+  "description": "Astrology meets financial markets — niveshsetu.xyz",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "razorpay": "^2.9.2",
+    "openai": "^4.20.0",
+    "puppeteer": "^21.5.0",
+    "dotenv": "^16.3.1",
+    "cors": "^2.8.5",
+    "body-parser": "^1.20.2",
+    "nodemailer": "^6.9.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

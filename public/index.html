@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>NiveshSetu — Financial Astrology</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <style>
+    :root { --bg:#00020f; --gold:#d4b87a; --muted:#44455a; --font:'Space Grotesk',system-ui,sans-serif; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html,body { background:var(--bg); font-family:var(--font); color:#fff; overflow-x:hidden; touch-action:pan-y; }
+
+    /* ── Header ── */
+    #hdr {
+      position:fixed; top:0; left:0; right:0; z-index:50;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:16px 24px;
+      background:rgba(0,2,15,.85); backdrop-filter:blur(12px);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .logo { font-size:18px; font-weight:500; letter-spacing:2px; color:var(--gold); }
+    .logo span { font-weight:300; color:#888; }
+    #cta-btn {
+      background:linear-gradient(135deg,#c9a227,#e8c96a); color:#000;
+      border:none; padding:8px 20px; border-radius:20px;
+      font-family:var(--font); font-size:13px; font-weight:500;
+      cursor:pointer; letter-spacing:.5px;
+    }
+    #cta-btn:hover { opacity:.88; }
+
+    /* ── Solar System Canvas ── */
+    #solar { display:block; width:100%; height:100vh; }
+
+    /* ── Planet info panel ── */
+    #pnl {
+      position:fixed; bottom:-110%; left:0; right:0; z-index:40;
+      background:rgba(2,3,18,.97); border-top:1px solid rgba(255,255,255,.08);
+      padding:24px 24px 32px;
+      transition:bottom .38s cubic-bezier(.4,0,.2,1);
+      max-height:65vh; overflow-y:auto;
+    }
+    #pnl.open { bottom:0; }
+    .ptop { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px; }
+    #psym { font-size:44px; line-height:1; margin-bottom:4px; }
+    #pname { font-size:26px; font-weight:500; letter-spacing:2px; }
+    #psub { font-size:10px; color:var(--muted); letter-spacing:3px; margin-top:3px; text-transform:uppercase; }
+    .badge { display:inline-flex; align-items:center; padding:4px 12px; border-radius:20px; font-size:11px; font-weight:500; letter-spacing:1px; margin-top:10px; border:1px solid; }
+    .badge.rx   { background:rgba(255,60,60,.12); border-color:rgba(255,60,60,.4); color:#ff8888; }
+    .badge.dir  { background:rgba(60,200,100,.12); border-color:rgba(60,200,100,.4); color:#88e0a8; }
+    .badge.home { background:rgba(90,160,220,.12); border-color:rgba(90,160,220,.4); color:#90b8e8; }
+    .igrid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px; }
+    .icard { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07); border-radius:10px; padding:12px 14px; }
+    .iclbl { font-size:8px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; margin-bottom:5px; }
+    .icval { font-size:14px; font-weight:500; }
+    #pdesc { margin-top:14px; font-size:13px; line-height:1.72; color:#9a9ab0; }
+    #peffect { margin-top:12px; padding:12px 14px; background:rgba(255,255,255,.03); border-left:2px solid #666; border-radius:0 8px 8px 0; font-size:12px; line-height:1.65; color:#aaa; }
+    #xcls { background:rgba(255,255,255,.07); border:none; color:#888; width:30px; height:30px; border-radius:50%; cursor:pointer; font-size:14px; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+    #xcls:hover { background:rgba(255,255,255,.15); color:#fff; }
+
+    /* ── Events bar ── */
+    #evbar {
+      position:fixed; bottom:0; left:0; right:0; z-index:30;
+      background:linear-gradient(to top,rgba(0,2,15,.92) 55%,transparent);
+      padding:12px 20px 16px;
+    }
+    .evlbl { font-size:8px; letter-spacing:3px; color:var(--muted); text-transform:uppercase; margin-bottom:8px; }
+    .evlist { display:flex; gap:8px; flex-wrap:wrap; }
+    .evtag { font-size:10px; padding:3px 10px; border-radius:20px; border:1px solid; letter-spacing:.5px; cursor:pointer; transition:opacity .2s; }
+    .evtag:hover { opacity:.75; }
+    .evtag.rx  { border-color:rgba(255,80,80,.5); color:#ff9090; background:rgba(255,40,40,.1); }
+    .evtag.dir { border-color:rgba(80,200,120,.4); color:#90e0b0; background:rgba(40,180,80,.1); }
+
+    /* ── Report Section ── */
+    #report-section {
+      min-height:100vh; padding:80px 24px 60px;
+      display:flex; flex-direction:column; align-items:center;
+      background:linear-gradient(to bottom,#00020f,#050820,#00020f);
+    }
+    .section-title { font-size:28px; font-weight:300; letter-spacing:4px; color:var(--gold); text-align:center; margin-bottom:8px; }
+    .section-sub { font-size:13px; color:#666; letter-spacing:2px; text-align:center; margin-bottom:40px; }
+
+    .form-card {
+      width:100%; max-width:480px;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:16px; padding:32px;
+    }
+    .form-group { margin-bottom:20px; }
+    label { display:block; font-size:10px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; margin-bottom:8px; }
+    input {
+      width:100%; background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.1); border-radius:8px;
+      padding:12px 14px; color:#fff; font-family:var(--font); font-size:14px;
+    }
+    input:focus { outline:none; border-color:rgba(212,184,122,.5); }
+    input::placeholder { color:#444; }
+
+    .price-box {
+      background:rgba(212,184,122,.08); border:1px solid rgba(212,184,122,.25);
+      border-radius:10px; padding:16px; margin-bottom:20px; text-align:center;
+    }
+    .price-box .price { font-size:32px; font-weight:500; color:var(--gold); }
+    .price-box .price-sub { font-size:11px; color:#666; margin-top:4px; letter-spacing:1px; }
+
+    .preview-box {
+      background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.07);
+      border-radius:10px; padding:16px; margin-bottom:20px; display:none;
+    }
+    .preview-sign { font-size:20px; font-weight:500; color:var(--gold); margin-bottom:6px; }
+    .preview-text { font-size:13px; color:#9a9ab0; line-height:1.7; }
+
+    .pay-btn {
+      width:100%; padding:14px;
+      background:linear-gradient(135deg,#c9a227,#e8c96a); color:#000;
+      border:none; border-radius:10px; font-family:var(--font);
+      font-size:15px; font-weight:500; cursor:pointer; letter-spacing:.5px;
+    }
+    .pay-btn:hover { opacity:.88; }
+    .pay-btn:disabled { opacity:.4; cursor:not-allowed; }
+
+    .disclaimer { font-size:10px; color:#444; text-align:center; margin-top:14px; line-height:1.6; }
+
+    /* ── Hint ── */
+    #hint { position:fixed; top:50%; left:50%; transform:translate(-50%,60px); font-size:10px; color:rgba(255,255,255,.2); letter-spacing:3px; pointer-events:none; opacity:0; animation:fh 5s ease-in-out 2s forwards; white-space:nowrap; z-index:10; }
+    @keyframes fh { 0%,100%{opacity:0} 20%,80%{opacity:1} }
+  </style>
+</head>
+<body>
+
+<header id="hdr">
+  <div class="logo">Nivesh<span>Setu</span></div>
+  <button id="cta-btn" onclick="document.getElementById('report-section').scrollIntoView({behavior:'smooth'})">Get My Report ↓</button>
+</header>
+
+<canvas id="solar"></canvas>
+<div id="hint">TOUCH A PLANET TO EXPLORE</div>
+
+<div id="pnl">
+  <div class="ptop">
+    <div>
+      <div id="psym">☿</div>
+      <div id="pname">Mercury</div>
+      <div id="psub">The Messenger</div>
+      <div id="pbadge" class="badge rx">℞ Retrograde</div>
+    </div>
+    <button id="xcls" onclick="closePnl()">✕</button>
+  </div>
+  <div class="igrid">
+    <div class="icard"><div class="iclbl">Current sign</div><div class="icval" id="psign">—</div></div>
+    <div class="icard"><div class="iclbl">Orbital period</div><div class="icval" id="pper">—</div></div>
+  </div>
+  <div id="pdesc"></div>
+  <div id="peffect"></div>
+</div>
+
+<div id="evbar">
+  <div class="evlbl">Active transits</div>
+  <div class="evlist" id="evlist"></div>
+</div>
+
+<!-- Report Section -->
+<section id="report-section">
+  <h2 class="section-title">Your Financial Report</h2>
+  <p class="section-sub">PERSONALISED · EDUCATIONAL · ASTROLOGICAL</p>
+
+  <div class="form-card">
+    <div class="form-group">
+      <label>Full Name</label>
+      <input type="text" id="f-name" placeholder="Ankit Kulshreshtha">
+    </div>
+    <div class="form-group">
+      <label>Email Address</label>
+      <input type="email" id="f-email" placeholder="you@email.com">
+    </div>
+    <div class="form-group">
+      <label>Date of Birth</label>
+      <input type="date" id="f-dob" onchange="fetchPreview()">
+    </div>
+    <div class="form-group">
+      <label>Time of Birth (approx)</label>
+      <input type="time" id="f-tob">
+    </div>
+    <div class="form-group">
+      <label>Place of Birth</label>
+      <input type="text" id="f-pob" placeholder="Delhi, India">
+    </div>
+
+    <div class="preview-box" id="preview-box">
+      <div class="preview-sign" id="preview-sign"></div>
+      <div class="preview-text" id="preview-text"></div>
+      <p style="font-size:11px;color:#555;margin-top:10px">Full report includes planetary transits, favorable periods, wealth insights & PDF delivery to your email.</p>
+    </div>
+
+    <div class="price-box">
+      <div class="price">₹299</div>
+      <div class="price-sub">Full PDF report · Delivered to email · One-time</div>
+    </div>
+
+    <button class="pay-btn" id="pay-btn" onclick="startPayment()">Get Full Report — ₹299</button>
+    <p class="disclaimer">For educational & entertainment purposes only. Not financial advice.<br>By proceeding you agree to our <a href="/privacy.html" style="color:#666">Privacy Policy</a> & <a href="/refund.html" style="color:#666">Refund Policy</a>.</p>
+  </div>
+</section>
+
+<script>
+const PLANETS = [
+  { n:'Mercury', s:'☿', sub:'The Messenger', c:'#b0b0c8', g:'#d0d0f0', or:.17, sz:4.5, pd:88,    sign:'Scorpio',    rx:false, desc:'Rules communication, contracts, travel and the rational mind.', eff:'Direct — clear thinking, smooth travel. Great time to sign agreements.', effR:'Retrograde — miscommunications, tech glitches, travel delays.' },
+  { n:'Venus',   s:'♀', sub:'The Lover',     c:'#f5e098', g:'#ffe8a0', or:.26, sz:6,   pd:225,   sign:'Sagittarius', rx:false, desc:'Rules love, beauty, relationships and financial flow.', eff:'Direct — magnetic energy for love and finances.', effR:'Retrograde — avoid major purchases or relationship decisions.' },
+  { n:'Earth',   s:'⊕', sub:'The Observer',  c:'#5a9fd4', g:'#7ab8f0', or:.35, sz:6,   pd:365,   sign:'—',           rx:false, desc:'Your home base. The reference point from which retrograde motion is observed.', eff:'You are here.', effR:'' },
+  { n:'Mars',    s:'♂', sub:'The Warrior',   c:'#d45a3a', g:'#f07858', or:.44, sz:5,   pd:687,   sign:'Leo',         rx:false, desc:'Rules action, ambition and raw physical energy.', eff:'Direct in Leo — bold confidence. Start new ventures now.', effR:'Retrograde — frustration, blocked energy. Avoid conflict.' },
+  { n:'Jupiter', s:'♃', sub:'The Expander',  c:'#d4a060', g:'#f0c07a', or:.555,sz:13,  pd:4333,  sign:'Virgo',       rx:true,  desc:'Rules luck, wisdom and abundance. The great benefic.', eff:'Direct — doors open, opportunities expand.', effR:'Retrograde in Virgo — revisit health routines. Inner growth over outer expansion.' },
+  { n:'Saturn',  s:'♄', sub:'The Teacher',   c:'#e8d898', g:'#f8e8b0', or:.655,sz:10,  pd:10759, sign:'Aries',       rx:true,  rings:true, desc:'Rules discipline, karma and long-term lessons.', eff:'Direct — build seriously, commit to structures.', effR:'Retrograde in Aries — karmic review of identity and impulsive actions.' },
+  { n:'Uranus',  s:'♅', sub:'The Rebel',     c:'#7de8e8', g:'#a0f4f4', or:.755,sz:8,   pd:30687, sign:'Gemini',      rx:true,  desc:'Rules revolution, innovation and sudden breakthroughs.', eff:'Direct — unexpected changes arrive fast.', effR:'Retrograde in Gemini — internal revolution in thinking and communication.' },
+  { n:'Neptune', s:'♆', sub:'The Mystic',    c:'#5576e8', g:'#7898ff', or:.86, sz:8,   pd:60190, sign:'Aries',       rx:true,  desc:'Rules dreams, illusions and spiritual connection.', eff:'Direct — heightened intuition and creative flow.', effR:'Retrograde in Aries — illusions about self dissolve. Rare clarity emerges.' },
+]
+
+const cv = document.getElementById('solar'), ctx = cv.getContext('2d')
+let W,H,cx,cy,maxR,stars=[],angs=[],ppos=[],aid
+
+function resize() {
+  const dpr=window.devicePixelRatio||1
+  W=window.innerWidth; H=window.innerHeight
+  cv.width=W*dpr; cv.height=H*dpr; cv.style.width=W+'px'; cv.style.height=H+'px'
+  ctx.scale(dpr,dpr); cx=W/2; cy=H/2; maxR=Math.min(W,H)*.43
+  stars=Array.from({length:260},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.4,ph:Math.random()*Math.PI*2,sp:.0007+Math.random()*.0018}))
+}
+
+function initAngs() {
+  const d=(Date.now()-new Date('2000-01-01T12:00:00Z').getTime())/86400000
+  const off=[.5,1.2,2.1,3.8,.9,4.2,1.7,5.1]
+  angs=PLANETS.map((p,i)=>((d/p.pd)*Math.PI*2+off[i])%(Math.PI*2))
+}
+
+function dk(h){const r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16);return `rgb(${Math.floor(r*.4)},${Math.floor(g*.4)},${Math.floor(b*.4)})`}
+
+function draw(t) {
+  ctx.fillStyle='#00020f'; ctx.fillRect(0,0,W,H)
+  for(const s of stars){const a=.2+.6*Math.abs(Math.sin(t*s.sp+s.ph));ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(255,255,255,${a})`;ctx.fill()}
+  for(const p of PLANETS){if(p.n==='Earth')continue;ctx.beginPath();ctx.arc(cx,cy,p.or*maxR,0,Math.PI*2);ctx.strokeStyle=p.rx?'rgba(255,80,80,.13)':'rgba(255,255,255,.055)';ctx.lineWidth=.5;ctx.setLineDash(p.rx?[2,5]:[]);ctx.stroke();ctx.setLineDash([])}
+  const pulse=26+7*Math.sin(t*.001);ctx.shadowBlur=pulse;ctx.shadowColor='#ff8800'
+  const sg=ctx.createRadialGradient(cx,cy,0,cx,cy,21);sg.addColorStop(0,'#fff9e8');sg.addColorStop(.4,'#ffaa30');sg.addColorStop(1,'#ff5000')
+  ctx.beginPath();ctx.arc(cx,cy,21,0,Math.PI*2);ctx.fillStyle=sg;ctx.fill();ctx.shadowBlur=0
+  for(let i=0;i<3;i++){const r=30+i*12+4*Math.sin(t*.0007+i);ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.strokeStyle=`rgba(255,130,0,${.16-i*.04})`;ctx.lineWidth=1.4-i*.3;ctx.stroke()}
+  ppos=[]
+  for(let i=0;i<PLANETS.length;i++){
+    const p=PLANETS[i];angs[i]+=(.00013*365/p.pd)*(p.rx?-.06:1)
+    const r=p.or*maxR,px=cx+r*Math.cos(angs[i]),py=cy+r*Math.sin(angs[i]);ppos.push({x:px,y:py,sz:p.sz,i})
+    if(p.rings){ctx.beginPath();ctx.ellipse(px,py,p.sz*2.35,p.sz*.58,-0.35,0,Math.PI*2);ctx.strokeStyle=p.c+'88';ctx.lineWidth=3;ctx.stroke()}
+    ctx.shadowBlur=p.sz*2.8;ctx.shadowColor=p.g;ctx.beginPath();ctx.arc(px,py,p.sz,0,Math.PI*2)
+    const pg=ctx.createRadialGradient(px-p.sz*.35,py-p.sz*.35,0,px,py,p.sz);pg.addColorStop(0,'rgba(255,255,255,.95)');pg.addColorStop(.35,p.c);pg.addColorStop(1,dk(p.c))
+    ctx.fillStyle=pg;ctx.fill();ctx.shadowBlur=0
+    if(p.rings){ctx.save();ctx.beginPath();ctx.ellipse(px,py,p.sz*2.35,p.sz*.58,-0.35,0,Math.PI);ctx.strokeStyle=p.c+'55';ctx.lineWidth=2.5;ctx.stroke();ctx.restore()}
+    if(p.rx){const bx=px+p.sz+3,by=py-p.sz-3;ctx.beginPath();ctx.arc(bx,by,7,0,Math.PI*2);ctx.fillStyle='rgba(210,35,35,.95)';ctx.fill();ctx.font='bold 8px serif';ctx.fillStyle='#fff';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('℞',bx,by)}
+    ctx.font='9px "Space Grotesk",system-ui,sans-serif';ctx.fillStyle='rgba(255,255,255,.48)';ctx.textAlign='center';ctx.textBaseline='top';ctx.fillText(p.n,px,py+p.sz+5)
+  }
+  aid=requestAnimationFrame(draw)
+}
+
+function hit(mx,my){for(const h of [...ppos].reverse()){if(Math.hypot(mx-h.x,my-h.y)<h.sz+18)return PLANETS[h.i]}return null}
+
+function showPnl(p){
+  document.getElementById('psym').textContent=p.s;document.getElementById('pname').textContent=p.n;document.getElementById('psub').textContent=p.sub
+  document.getElementById('psign').textContent=p.sign;document.getElementById('pper').textContent=p.pd>=365?(p.pd/365.25).toFixed(1)+' yrs':p.pd+' days'
+  document.getElementById('pdesc').textContent=p.desc
+  const eff=document.getElementById('peffect'),bdg=document.getElementById('pbadge')
+  if(p.n==='Earth'){bdg.textContent='⊕ You are here';bdg.className='badge home';eff.textContent=p.eff;eff.style.borderColor='#5a9fd4'}
+  else if(p.rx){bdg.textContent='℞ Retrograde';bdg.className='badge rx';eff.textContent=p.effR;eff.style.borderColor='#ff5555'}
+  else{bdg.textContent='↗ Direct';bdg.className='badge dir';eff.textContent=p.eff;eff.style.borderColor='#55bb80'}
+  document.getElementById('pnl').classList.add('open')
+}
+function closePnl(){document.getElementById('pnl').classList.remove('open')}
+
+const el=document.getElementById('evlist')
+for(const p of PLANETS){if(p.n==='Earth')continue;const t=document.createElement('div');t.className='evtag '+(p.rx?'rx':'dir');t.textContent=p.rx?`${p.s} ${p.n} ℞`:`${p.s} ${p.n} ↗`;t.onclick=()=>showPnl(p);el.appendChild(t)}
+
+const rc=()=>cv.getBoundingClientRect()
+cv.addEventListener('click',e=>{const r=rc(),p=hit(e.clientX-r.left,e.clientY-r.top);p?showPnl(p):closePnl()})
+cv.addEventListener('touchend',e=>{e.preventDefault();const t=e.changedTouches[0],r=rc(),p=hit(t.clientX-r.left,t.clientY-r.top);if(p)showPnl(p)},{passive:false})
+window.addEventListener('resize',()=>{cancelAnimationFrame(aid);resize();aid=requestAnimationFrame(draw)})
+resize();initAngs();aid=requestAnimationFrame(draw)
+
+// ── Report form ──
+async function fetchPreview() {
+  const dob = document.getElementById('f-dob').value
+  if (!dob) return
+  try {
+    const res = await fetch('/api/report/preview', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({dob}) })
+    const data = await res.json()
+    document.getElementById('preview-sign').textContent = `☀ ${data.sunSign}`
+    document.getElementById('preview-text').textContent = data.preview
+    document.getElementById('preview-box').style.display = 'block'
+  } catch(e) {}
+}
+
+async function startPayment() {
+  const name  = document.getElementById('f-name').value.trim()
+  const email = document.getElementById('f-email').value.trim()
+  const dob   = document.getElementById('f-dob').value
+  const tob   = document.getElementById('f-tob').value
+  const pob   = document.getElementById('f-pob').value.trim()
+
+  if (!name || !email || !dob) { alert('Please fill Name, Email and Date of Birth.'); return }
+
+  const btn = document.getElementById('pay-btn')
+  btn.disabled = true; btn.textContent = 'Creating order...'
+
+  try {
+    const res = await fetch('/api/payment/create-order', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({amount:299,name,email,dob,tob,pob}) })
+    const { orderId } = await res.json()
+
+    const rzp = new Razorpay({
+      key: 'YOUR_RAZORPAY_KEY_ID',
+      amount: 29900,
+      currency: 'INR',
+      name: 'NiveshSetu',
+      description: 'Financial Astrology Report',
+      order_id: orderId,
+      handler: async (response) => {
+        const vres = await fetch('/api/payment/verify', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({...response, userData:{name,email,dob,tob,pob}}) })
+        const vdata = await vres.json()
+        if (vdata.success) {
+          btn.textContent = '✓ Report will be emailed to you!'
+          btn.style.background = '#2d7a4f'
+          btn.style.color = '#fff'
+        }
+      },
+      prefill: { name, email },
+      theme: { color: '#c9a227' },
+    })
+    rzp.open()
+  } catch(e) {
+    alert('Something went wrong. Please try again.')
+  }
+  btn.disabled = false
+  if (btn.textContent === 'Creating order...') btn.textContent = 'Get Full Report — ₹299'
+}
+</script>
+</body>
+</html>
