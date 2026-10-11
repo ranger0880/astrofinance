@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const OpenAI = require('openai')
-const puppeteer = require('puppeteer')
+const PDFDocument = require('pdfkit')
 const nodemailer = require('nodemailer')
 const path = require('path')
 const fs = require('fs')
@@ -53,32 +53,45 @@ Important: Frame everything as educational astrology content, NOT financial advi
   })
 
   const reportText = completion.choices[0].message.content
-  const pdfPath = path.join(__dirname, '..', 'reports', `${Date.now()}_${name.replace(/\s/g,'_')}.pdf`)
+  const reportsDir = path.join(__dirname, '..', 'reports')
+  if (!fs.existsSync(reportsDir)) fs.mkdirSync(reportsDir)
+  const pdfPath = path.join(reportsDir, `${Date.now()}_${name.replace(/\s/g,'_')}.pdf`)
 
-  if (!fs.existsSync(path.join(__dirname, '..', 'reports'))) {
-    fs.mkdirSync(path.join(__dirname, '..', 'reports'))
-  }
+  await new Promise((resolve, reject) => {
+    const doc = new PDFDocument({ size: 'A4', margin: 50 })
+    const stream = fs.createWriteStream(pdfPath)
+    doc.pipe(stream)
 
-  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8">
-  <style>
-    body{font-family:Georgia,serif;max-width:700px;margin:40px auto;color:#1a1a2e;line-height:1.8}
-    h1{color:#c9a227;font-size:28px;text-align:center;border-bottom:2px solid #c9a227;padding-bottom:12px}
-    h2{color:#4a3f35;font-size:16px;margin-top:28px}
-    .meta{text-align:center;color:#666;font-size:13px;margin-bottom:30px}
-    .disclaimer{font-size:11px;color:#999;margin-top:40px;padding:12px;border:1px solid #ddd;border-radius:6px}
-    .footer{text-align:center;color:#c9a227;font-size:13px;margin-top:30px}
-  </style></head><body>
-  <h1>NiveshSetu — Financial Astrology Report</h1>
-  <div class="meta">Prepared for ${name} · Sun Sign: ${sunSign} · ${new Date().toLocaleDateString('en-IN')}</div>
-  <div>${reportText.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')}</div>
-  <div class="footer">niveshsetu.xyz · For educational purposes only</div>
-  </body></html>`
+    // Header
+    doc.fillColor('#c9a227').fontSize(22).font('Helvetica-Bold')
+       .text('NiveshSetu — Financial Astrology Report', { align: 'center' })
+    doc.moveDown(0.3)
+    doc.fillColor('#666666').fontSize(11).font('Helvetica')
+       .text(`Prepared for ${name}  ·  Sun Sign: ${sunSign}  ·  ${new Date().toLocaleDateString('en-IN')}`, { align: 'center' })
+    doc.moveDown(0.5)
+    doc.strokeColor('#c9a227').lineWidth(1).moveTo(50, doc.y).lineTo(545, doc.y).stroke()
+    doc.moveDown(1)
 
-  const browser = await puppeteer.launch({ args: ['--no-sandbox','--disable-setuid-sandbox'] })
-  const page = await browser.newPage()
-  await page.setContent(html, { waitUntil: 'networkidle0' })
-  await page.pdf({ path: pdfPath, format: 'A4', margin: { top:'20mm',bottom:'20mm',left:'15mm',right:'15mm' } })
-  await browser.close()
+    // Body
+    doc.fillColor('#1a1a2e').fontSize(12).font('Helvetica')
+    const paragraphs = reportText.split(/\n\n+/)
+    paragraphs.forEach(p => {
+      const trimmed = p.trim()
+      if (!trimmed) return
+      doc.text(trimmed, { align: 'justify', lineGap: 4 })
+      doc.moveDown(0.8)
+    })
+
+    // Footer
+    doc.moveDown(1)
+    doc.strokeColor('#dddddd').lineWidth(0.5).moveTo(50, doc.y).lineTo(545, doc.y).stroke()
+    doc.moveDown(0.5)
+    doc.fillColor('#c9a227').fontSize(10).text('niveshsetu.xyz  ·  For educational purposes only', { align: 'center' })
+
+    doc.end()
+    stream.on('finish', resolve)
+    stream.on('error', reject)
+  })
 
   const transporter = nodemailer.createTransport({
     service: 'gmail',
